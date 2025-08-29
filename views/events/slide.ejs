@@ -1,0 +1,76 @@
+
+
+<% promotedEvents.reverse() %>
+<% if (promotedEvents.length > 0) { %>
+
+ <div class="featured">
+
+  <div class="slider-container">
+
+   <div class="slides">
+<% promotedEvents.forEach((event, index) => { %>
+    <div class="slide">
+      <img src="<%= event.image%> <%= event.images%>" alt="Exciting Match">
+      <div class="caption">
+        <h2><%= event.title?.slice(0, 30) %></h2>
+        <h2><%= event.category %></h2>
+        <p><%= event.description?.slice(0, 50) %>.... <a class="login-btn" href="/show/<%= event.type %>/<%= event._id %>">Read More</a> </p>
+        <p><i class="far fa-clock"></i> <%= shortTime(event.createdAt) %></p>
+        <div class="btns">
+          <a href="/events"><button class="btn-find">Find Events</button></a>
+          <% if( !isUserLogin ){ %>
+            <a href="/login"><button class="btn-create">Create Your Event</button></a>
+          <% } else { %>
+            <% if (isUserLogin && isUserLogin.role) { %>
+              <% let profileUrl = ''; %>
+              <% switch (isUserLogin.role) {
+                case 'user':
+                  profileUrl = `/userDashboard/${isUserLogin._id}`;
+                  break;
+                case 'promoter':
+                  profileUrl = `/promoterDashboard/${isUserLogin._id}`;
+                  break;
+                case 'super-admin':
+                  profileUrl = `/adminDashboard/${isUserLogin._id}`;
+                  break;
+                case 'vendor':
+                  profileUrl = `/vendorDashboard/${isUserLogin._id}`;
+                  break;
+                case 'organizer':
+                  profileUrl = `/organiserDashboard/${isUserLogin._id}`;
+                  break;
+                default:
+                  profileUrl = `/userDashboard/${isUserLogin._id}`;
+              } %>
+
+              <a href="<%= profileUrl %>"><button class="btn-create">Create Your Event</button></a>
+            <% } %>
+
+          <% } %>
+          <!-- <a href="/login"><button class="btn-create">Create Your Event</button></a> -->
+        </div>
+      </div>
+    </div>
+
+<% }); %>
+  </div>
+
+  <div class="controls">
+    <span class="prev">❮</span>
+    <span class="next">❯</span>
+  </div>
+
+  <div class="indicators">
+    <% promotedEvents.forEach((event, index) => { %>
+      <span class="dot <%= index === 0 ? 'active-dot' : '' %>"></span>
+    <% }); %>
+  </div>
+
+</div>
+
+</div>
+
+
+<% } else { %>
+<p style="text-align:center; font-size:1em; margin-top: 25px; margin-bottom: -30px">No event found now, please come back later.</p>
+<% } %>

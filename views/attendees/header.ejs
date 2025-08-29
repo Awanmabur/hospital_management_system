@@ -1,0 +1,24 @@
+<header class="dashboard-header">
+  <div class="welcome-text">
+    Welcome back, <span style="color:#4a90e2;"><%= user.username %></span>
+  </div>
+  <div class="profile-search-bar">
+    <input id="desktop-search-input" type="text" placeholder="Search by title, desc, organizer" />
+  </div>
+  <div class="profile-summary">
+    <div class="profile-icons">
+      <div class="notification-container">
+        <i class="fas fa-bell" onclick="toggleNotifications()"></i>
+        <div class="notification-dropdown" id="notificationDropdown">
+          <p><strong>Notifications</strong></p>
+          <ul>
+            <% notifications.forEach(note => { %>
+              <li><%= note %></li>
+            <% }) %>
+          </ul>
+        </div>
+      </div>
+      <img class="attendee-avatar" src="<%= user.profile_image || 'https://randomuser.me/api/portraits/women/65.jpg' %>" alt="Attendee avatar" />
+    </div>
+  </div>
+</header>

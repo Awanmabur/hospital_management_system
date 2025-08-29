@@ -1,0 +1,72 @@
+ 
+  <div class="summary-cards">
+    <div class="finance-card">
+      <p>$<%= totalRevenue.toFixed(2) %></p>
+      <h3>Total Revenue</h3>
+    </div>
+    <div class="finance-card">
+      <p>$<%= tableRevenue.toFixed(2) %></p>
+      <h3>Table Revenue</h3>
+    </div>
+    <div class="finance-card">
+      <p>$<%= vipRevenue.toFixed(2) %></p>
+      <h3>VIP Revenue</h3>
+    </div>
+    <div class="finance-card">
+      <p>$<%= ordinaryRevenue.toFixed(2) %></p>
+      <h3>Ordinary Revenue</h3>
+    </div>
+  </div>
+
+
+  <section>
+    <h2 class="section-title">My Events</h2>
+    <div class="events-overview">
+      <% events.forEach(event => { %>
+        <article class="event-card" tabindex="0">
+          <img
+            class="event-image"
+            src="<%= event.image %>"
+            alt="<%= event.title %>"
+          />
+          <div class="event-details">
+            <h3 class="event-title"><%= event.title?.slice(0,20) %>...</h3>
+            <p class="event-info">📅 <%= new Date(event.date).toDateString() %> | <i style="font-size: 14px; margin-left: 5px;" class="fa fa-map-marker" aria-hidden="true"></i> <%= event.location %></p>
+          </div>
+          <div class="event-actions">
+            <a class="view-btn" href="/edit/<%= event._id %>">Edit</a>
+            <a class="view-btn" href="/show/<%= event.type %>/<%= event._id %>">View</a>
+          </div>
+        </article>
+      <% }) %>
+    </div>
+  </section>
+
+
+
+  <section>
+    <h2 class="section-title">Recent Attendees</h2>
+    <div class="attendees-preview">
+      <ul class="attendees-list" aria-label="Recent attendees list">
+        <% users.forEach(attendee => { %>
+          <li class="attendee-item">
+            <img class="attendee-avatar" src="<%= attendee.avatar %>" alt="Attendee avatar" />
+            <span class="attendee-name"><%= attendee.attendeeName %></span>
+            <span class="attendee-event"><%= attendee.event %></span>
+          </li>
+        <% }) %>
+      </ul>
+    </div>
+  </section>
+
+
+
+  <section>
+    <h2 class="section-title">Notifications</h2>
+    <div class="notifications" role="list" aria-label="Notifications list">
+      <div class="notification-item">Your event "South Sudan Music Fest 2025" sold 50 tickets today!</div>
+      <div class="notification-item">New message from attendee Mary Deng.</div>
+      <div class="notification-item">Ticket sales for "Tech Summit" reached 75% capacity.</div>
+      <div class="notification-item">You received a 5-star review for "Food & Culture Fest".</div>
+    </div>
+  </section>

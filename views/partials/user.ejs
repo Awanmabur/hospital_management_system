@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>All Users</title>
+  <link rel="stylesheet" href="/styles/style.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 2rem;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .filter-search {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .filter-search input[type="text"] {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .filter-search select {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .user-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .user-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      padding: 1rem;
+      text-align: center;
+      transition: transform 0.2s ease;
+    }
+
+    .user-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .user-card img {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 0.5rem;
+    }
+
+    .user-card h4 {
+      margin: 0.3rem 0;
+      font-size: 1.1rem;
+    }
+
+    .user-card span {
+      font-size: 0.9rem;
+      color: gray;
+    }
+
+    .user-card a {
+      display: inline-block;
+      margin-top: 0.5rem;
+      text-decoration: none;
+      color: #4a90e2;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="section-title">All Users</div>
+
+    <div class="filter-search">
+      <input type="text" placeholder="Search by name..." id="searchInput" />
+      <select id="roleFilter">
+        <option value="">All Roles</option>
+        <option value="organizer">Organizer</option>
+        <option value="promoter">Promoter</option>
+        <option value="advertiser">Advertiser</option>
+      </select>
+    </div>
+
+    <% if (users && users.length > 0) { %>
+      <div class="user-grid" id="userGrid">
+        <% users.forEach(user => { %>
+          <div class="user-card" data-name="<%= (user.username || '').toLowerCase() %>" data-role="<%= user.role || '' %>">
+            <img src="<%= user.profile_image || 'https://via.placeholder.com/100' %>" alt="<%= user.name || 'User' %>" />
+            <h4><%= user.username || 'Unnamed User' %></h4>
+            <span><%= user.role || 'No Role' %></span>
+            <br />
+            <a href="/user/<%= user._id %>">View Profile</a>
+          </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <p>No users found.</p>
+    <% } %>
+  </div>
+
+  <script>
+    const searchInput = document.getElementById('searchInput');
+    const roleFilter = document.getElementById('roleFilter');
+    const userGrid = document.getElementById('userGrid');
+
+    function filterUsers() {
+      const search = searchInput.value.toLowerCase();
+      const role = roleFilter.value;
+
+      Array.from(userGrid.children).forEach(card => {
+        const name = card.dataset.name;
+        const userRole = card.dataset.role;
+
+        const matchesSearch = name.includes(search);
+        const matchesRole = !role || userRole === role;
+
+        card.style.display = matchesSearch && matchesRole ? 'block' : 'none';
+      });
+    }
+
+    searchInput.addEventListener('input', filterUsers);
+    roleFilter.addEventListener('change', filterUsers);
+  </script>
+</body>
+</html>

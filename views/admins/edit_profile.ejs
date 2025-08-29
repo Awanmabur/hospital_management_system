@@ -1,0 +1,156 @@
+<%- include("../partials/header") %>
+<%- include("../partials/dropdown") %>
+<%- include("../partials/flash") %>
+
+
+<% if (user.profile_image) { %>
+  <div style="background-image: url('<%= user.profile_image %>');" class="hero">
+
+  </div>
+<% } %>
+
+<form action="/updateInfo/<%= user._id %>" method="POST" enctype="multipart/form-data" class="profile-form">
+
+  <div class="profile-container">
+
+
+    <!-- Left Column -->
+    <div class="profile-col">
+      <h3>General Info</h3>
+
+      <label>Username</label>
+      <input type="text" name="username" value="<%= user.username %>">
+
+      <label>Email</label>
+      <input type="email" name="email" value="<%= user.email %>">
+
+      <label>Phone</label>
+      <input type="text" name="phone" value="<%= user.phone %>">
+
+      <label>Location</label>
+      <input type="text" name="location" value="<%= user.location %>">
+
+      <label>Bio</label>
+      <textarea name="bio"><%= user.bio %></textarea>
+
+    </div>
+
+    <!-- Right Column -->
+    <div class="profile-col">
+      <h3>Profile Image</h3>
+      <label>Facebook</label>
+      <input type="text" name="facebook" value="<%= user.facebook %>">
+
+      <label>Instagram</label>
+      <input type="text" name="instagram" value="<%= user.instagram %>">
+
+      <label>Website</label>
+      <input type="text" name="website" value="<%= user.website %>">
+
+      <label for="blogImage">Cover Image</label>
+      <input type="file" id="blogImage" name="profile_image" accept="image/*" onchange="previewImage(event)" />
+
+
+      <!-- Image preview container -->
+      <div id="imagePreviewContainer" style="margin-top: 10px;">
+        <img
+          id="imagePreview"
+          src="<%= user.profile_image ? user.profile_image.url : '' %>"
+          alt="Image Preview"
+          style="width: 100%; border: 1px solid #ccc; padding: 5px; <%= user.profile_image ? '' : 'display:none;' %>"
+        />
+      </div>
+
+      <script>
+        function previewImage(event) {
+          const file = event.target.files[0];
+          const preview = document.getElementById('imagePreview');
+
+          if (file) {
+            preview.src = URL.createObjectURL(file);
+            preview.style.display = 'block';
+          } else {
+            preview.src = '';
+            preview.style.display = 'none';
+          }
+        }
+      </script>
+
+
+      <!-- Organizer Info -->
+      <div id="organizer-fields" class="hidden">
+        <h3>Organizer Info</h3>
+        <label>Bio</label>
+        <textarea rows="6" name="organizer_info.bio"><%= user.organizer_info?.bio %></textarea>
+
+        <label>Facebook</label>
+        <input type="text" name="organizer_info.facebook" value="<%= user.organizer_info?.facebook %>">
+
+        <label>Instagram</label>
+        <input type="text" name="organizer_info.instagram" value="<%= user.organizer_info?.instagram %>">
+
+        <label>Website</label>
+        <input type="text" name="organizer_info.website" value="<%= user.organizer_info?.website %>">
+      </div>
+
+      <!-- Promoter Info -->
+      <div id="promoter-fields" class="hidden">
+        <h3>Promoter Info</h3>
+        <label>Commission Rate</label>
+        <input type="number" step="0.01" name="promoter_info.commission_rate" value="<%= user.promoter_info?.commission_rate %>">
+
+        <label>Total Earned</label>
+        <input type="text" value="<%= user.promoter_info?.total_earned %>" readonly>
+
+        <label>Sales Count</label>
+        <input type="text" value="<%= user.promoter_info?.sales_count %>" readonly>
+      </div>
+
+      <!-- Advertiser Info -->
+      <div id="advertiser-fields" class="hidden">
+        <h3>Advertiser Info</h3>
+        <label>Business Name</label>
+        <input type="text" name="advertiser_info.business_name" value="<%= user.advertiser_info?.business_name %>">
+
+        <label>Website</label>
+        <input type="text" name="advertiser_info.business_website" value="<%= user.advertiser_info?.business_website %>">
+
+        <label>Bio</label>
+        <textarea name="advertiser_info.advertiser_bio"><%= user.advertiser_info?.advertiser_bio %></textarea>
+      </div>
+
+      <!-- Permissions -->
+      <div id="permissions-fields" class="<%= ['admin','super-admin'].includes(user.role)?'':'hidden' %>">
+        <h3>Permissions</h3>
+        <label><input type="checkbox" name="permissions.can_manage_users" <%= user.permissions?.can_manage_users?'checked':'' %>> Can Manage Users</label>
+        <label><input type="checkbox" name="permissions.can_approve_events" <%= user.permissions?.can_approve_events?'checked':'' %>> Can Approve Events</label>
+        <label><input type="checkbox" name="permissions.can_manage_ads" <%= user.permissions?.can_manage_ads?'checked':'' %>> Can Manage Ads</label>
+        <label><input type="checkbox" name="permissions.can_manage_admins" <%= user.permissions?.can_manage_admins?'checked':'' %>> Can Manage Admins</label>
+      </div>
+
+    </div> <!-- End Right Column -->
+
+  </div> <!-- End Container -->
+
+  <button class="submit-btn">Update Profile</button>
+
+</form>
+
+
+<script>
+  function showFieldsForRole(role) {
+    document.getElementById('organizer-fields').classList.toggle('hidden', role !== 'organizer');
+    document.getElementById('promoter-fields').classList.toggle('hidden', role !== 'promoter');
+    document.getElementById('advertiser-fields').classList.toggle('hidden', role !== 'vender');
+  }
+
+  const roleSelect = document.getElementById('role-select');
+  if(roleSelect){
+    roleSelect.addEventListener('change', function () {
+      showFieldsForRole(this.value);
+    });
+    showFieldsForRole(roleSelect.value);
+  }
+</script>
+
+<%- include("../partials/footer") %>

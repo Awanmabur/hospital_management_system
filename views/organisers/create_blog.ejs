@@ -1,0 +1,91 @@
+ 
+  <h1>Create Event</h1>
+
+  <div class="ce-container">
+
+    <!-- Ticket Section -->
+    <div class="ce-box">
+      <h2>Ticket Details</h2>
+      <form action="/createBlog" method="post" enctype="multipart/form-data">
+
+        <div class="ce-form-group">
+          <label class="ce-label" for="ce-blog-image">Cover Image</label>
+          <input type="file" id="ce-blog-image" class="ce-input" name="image" accept="image/*" onchange="cePreviewImage(event)" />
+        </div>
+
+        <!-- Image preview container -->
+        <div id="ce-image-preview-container" style="margin-top: 10px;">
+          <img id="ce-image-preview" src="" alt="Image Preview" style="display:none; width: 100%; border: 1px solid #ccc; padding: 5px;" />
+        </div>
+
+        <script>
+          function cePreviewImage(event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('ce-image-preview');
+
+            if (file) {
+              preview.src = URL.createObjectURL(file);
+              preview.style.display = 'block';
+            } else {
+              preview.src = '';
+              preview.style.display = 'none';
+            }
+          }
+        </script>
+
+        <button type="submit" class="ce-btn">Create Event</button>
+
+    </div>
+
+    <!-- Event Section -->
+    <div class="ce-box">
+      <h2>Event Details</h2>
+
+      <div class="ce-form-group">
+        <label class="ce-label" for="ce-title">Blog Title</label>
+        <input type="text" id="ce-title" class="ce-input" name="title" placeholder="Enter event name" />
+      </div>
+
+      <div class="ce-form-group">
+        <label class="ce-label" for="ce-category">Blog Category</label>
+        <select id="ce-category" class="ce-select" name="category" required>
+          <option value="">Select Category</option>
+          <option value="music">Music</option>
+          <option value="fashion">Fashion</option>
+          <option value="sports">Sports</option>
+          <option value="business">Business</option>
+          <option value="education">Education</option>
+          <option value="religion">Religion</option>
+          <option value="others">Others</option>
+        </select>
+      </div>
+
+      <div class="ce-form-group">
+        <label class="ce-label" for="ce-description">Description</label>
+        <textarea id="ce-description" class="ce-textarea" rows="6" name="content" placeholder="Describe the event..."></textarea>
+      </div>
+
+      </form>
+    </div>
+
+  </div>
+
+  <script>
+    function ceToggleLocationInput() {
+      const eventType = document.getElementById("ce-event-type");
+      const locationInput = document.getElementById("ce-location");
+
+      if (eventType && locationInput) {
+        if (eventType.value === "online") {
+          locationInput.disabled = true;
+          locationInput.placeholder = "Not required for online event";
+          locationInput.value = "";
+        } else {
+          locationInput.disabled = false;
+          locationInput.placeholder = "Enter physical location";
+        }
+      }
+    }
+
+    window.onload = ceToggleLocationInput;
+  </script>

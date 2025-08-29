@@ -1,0 +1,124 @@
+<%-include("../partials/header") %>
+
+<%-include("../partials/dropdown") %>
+
+<%-include("../partials/flash") %>
+
+  <div class="ticket-container" id="ticket">
+    <div class="banner">
+      <h1>Classic Events Pro</h1>
+      <p>This is Your Official Event Ticket</p>
+      <p>contact: +256781977217</p>
+      <p>contact: +256707180023</p>
+    </div>
+
+    <div class="content">
+      <div class="left">
+        <div class="section-title">Attendee Info</div>
+        <div class="info">
+          <p><strong>Name:</strong> <%= booking.full_name || 'N/A' %></p>
+          <p><strong>Email:</strong> <%= booking.email || 'N/A' %></p>
+          <p><strong>Phone:</strong> <%= booking.phone || 'N/A' %></p>
+        </div>
+
+        <div class="section-title">Organizer</div>
+        <div class="info">
+          <% if (booking.item) { %>
+            <p><strong>Organizer Name:</strong> <%= booking.item.created_by.username %></p>
+          <% } else { %>
+            <p><strong>Vendor Name:</strong> <%= booking.service.created_by.username %></p>
+          <% } %>
+          <% if (booking.item) { %>
+            <p><strong>Organizer Email:</strong> <%= booking.item.created_by.email %></p>
+          <% } else { %>
+            <p><strong>Vendor Email:</strong> <%= booking.service.created_by.email %></p>
+          <% } %>
+          <% if (booking.item) { %>
+            <p><strong>Organizer Tel:</strong> <%= booking.item.created_by.phone %></p>
+          <% } else { %>
+            <p><strong>Vendor Tel:</strong> <%= booking.service.created_by.phone %></p>
+          <% } %>
+
+         </div>
+      </div>
+
+      <div class="right">
+        <div class="section-title">Ticket Info</div>
+        <div class="info">
+          <p><strong>Ticket Code:</strong> <span style="color: #e74c3c;"><%= booking.booking_reference %></span></p>
+          <% if (booking.item) { %>
+            <p><strong>Event Name:</strong> <%= booking.item.title %></p>
+          <% } else { %>
+            <p>N/A</p>
+          <% } %>
+          <% if (booking.item) { %>
+            <p><strong>Location:</strong> <%= booking.item.location %></p>
+          <% } else { %>
+            <p>N/A</p>
+          <% } %>
+          <% if (booking.item) { %>
+            <p><strong>Event Date:</strong> <%= new Date(booking.item.date).toDateString() %></p>
+          <% } else { %>
+            <p>N/A</p>
+          <% } %>
+          <p><strong>Ticket Type:</strong> <%= booking.ticket_types || 'N/A' %></p>
+          <p><strong>Quantity:</strong> <%= booking.quantity %></p>
+          <p><strong>Amount Paid:</strong> $<%= booking.total_paid %></p>
+          <p><strong>Status:</strong> <%= booking.status %></p>
+          <p><strong>Ticket Status:</strong> <%= booking.ticket_status %></p>
+          <p><strong>Payment Ref:</strong> <%= booking.payment_reference || 'N/A' %></p>
+        </div>
+
+        <div class="qr-code">
+          <img src="<%= booking.qr_code %>" alt="QR Code" width="200" height="200" />
+          <p>Scan to verify ticket at event gate</p>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="security-note">
+      <strong>Note:</strong> This ticket is valid only with a scannable QR code. Duplicates or altered copies are not permitted. Please carry a valid ID. Ticket codes are encrypted for security.
+    </div>
+
+    <div class="download-btn">
+      <button onclick="printTicket()">🖨️ Print</button>
+      <button onclick="downloadPDF()">⬇️ Download PDF</button>
+    </div>
+
+    <div class="share-options">
+      <p><strong>Share your ticket:</strong>
+        <a href="#" onclick="alert('Share on WhatsApp')">WhatsApp</a> |
+        <a href="#" onclick="alert('Share on Facebook')">Facebook</a> |
+        <a href="#" onclick="alert('Copy link')">Copy Link</a>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    function printTicket() {
+      const ticket = document.getElementById('ticket');
+      const win = window.open('', '', 'width=800,height=1000');
+      win.document.write('<html><head><title>Ticket</title></head><body>');
+      win.document.write(ticket.innerHTML);
+      win.document.write('</body></html>');
+      win.document.close();
+      win.focus();
+      win.print();
+      win.close();
+    }
+
+    function downloadPDF() {
+      const element = document.getElementById('ticket');
+      html2pdf().set({
+        margin: 0.5,
+        filename: 'event-ticket.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+      }).from(element).save();
+    }
+  </script>
+
+
+<%-include("../partials/footer") %>

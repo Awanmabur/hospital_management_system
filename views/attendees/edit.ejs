@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Profile</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+    }
+    form {
+      max-width: 1000px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      margin-bottom: 10px;
+      border-bottom: 2px solid #4a90e2;
+      padding-bottom: 5px;
+    }
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .col {
+      flex: 1 1 45%;
+      display: flex;
+      flex-direction: column;
+    }
+    label {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input, textarea, select {
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      margin-top: 5px;
+    }
+    @media(max-width: 768px) {
+      .col {
+        flex: 1 1 100%;
+      }
+    }
+    .submit-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #4a90e2;
+      border: none;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <form action="/updateInfo/<%= user._id %>" method="POST" enctype="multipart/form-data">
+    <h2>General Info</h2>
+    <div class="row">
+      <div class="col">
+        <label>Username</label>
+        <input type="text" name="username" value="<%= user.username %>">
+
+        <label>Email</label>
+        <input type="email" name="email" value="<%= user.email %>">
+
+        <label>Phone</label>
+        <input type="text" name="phone" value="<%= user.phone %>">
+
+        <label>Location</label>
+        <input type="text" name="location" value="<%= user.location %>">
+
+        <label>Facebook</label>
+        <input type="text" name="facebook" value="<%= user.facebook %>">
+
+        <label>Website</label>
+        <input type="text" name="website" value="<%= user.website %>">
+
+        <label>Instagram</label>
+        <input type="text" name="instagram" value="<%= user.instagram %>">
+
+        <label>Bio</label>
+        <textarea name="bio"><%= user.bio %></textarea>
+
+      </div>
+      <div class="col">
+        <label>Profile Image</label>
+        <input type="file" name="profile_image">
+        <% if (user.profile_image) { %>
+          <img src="<%= user.profile_image %>" alt="Profile" style="width:100px;margin-top:10px;">
+        <% } %>
+      </div>
+    </div>
+
+    <div id="organizer-fields" class="hidden">
+      <h2>Organizer Info</h2>
+      <div class="row">
+        <div class="col">
+          <label>Bio</label>
+          <textarea name="organizer_info.bio"><%= user.organizer_info?.bio %></textarea>
+
+          <label>Facebook</label>
+          <input type="text" name="organizer_info.facebook" value="<%= user.organizer_info?.facebook %>">
+
+          <label>Website</label>
+          <input type="text" name="organizer_info.website" value="<%= user.organizer_info?.website %>">
+
+          <label>Instagram</label>
+          <input type="text" name="organizer_info.website" value="<%= user.organizer_info?.website %>">
+        </div>
+      </div>
+    </div>
+
+    <div id="promoter-fields" class="hidden">
+      <h2>Promoter Info</h2>
+      <div class="row">
+        <div class="col">
+          <label>Commission Rate</label>
+          <input type="number" step="0.01" name="promoter_info.commission_rate" value="<%= user.promoter_info?.commission_rate %>">
+
+          <label>Total Earned (readonly)</label>
+          <input type="text" value="<%= user.promoter_info?.total_earned %>" readonly>
+
+          <label>Sales Count (readonly)</label>
+          <input type="text" value="<%= user.promoter_info?.sales_count %>" readonly>
+        </div>
+      </div>
+    </div>
+
+    <div id="advertiser-fields" class="hidden">
+      <h2>Advertiser Info</h2>
+      <div class="row">
+        <div class="col">
+          <label>Business Name</label>
+          <input type="text" name="advertiser_info.business_name" value="<%= user.advertiser_info?.business_name %>">
+
+          <label>Website</label>
+          <input type="text" name="advertiser_info.business_website" value="<%= user.advertiser_info?.business_website %>">
+
+          <label>Bio</label>
+          <textarea name="advertiser_info.advertiser_bio"><%= user.advertiser_info?.advertiser_bio %></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div id="permissions-fields" class="<%= ['admin', 'super-admin'].includes(user.role) ? '' : 'hidden' %>">
+      <h2>Permissions</h2>
+      <div class="row">
+        <div class="col">
+          <label><input type="checkbox" name="permissions.can_manage_users" <%= user.permissions?.can_manage_users ? 'checked' : '' %>> Can Manage Users</label>
+          <label><input type="checkbox" name="permissions.can_approve_events" <%= user.permissions?.can_approve_events ? 'checked' : '' %>> Can Approve Events</label>
+          <label><input type="checkbox" name="permissions.can_manage_ads" <%= user.permissions?.can_manage_ads ? 'checked' : '' %>> Can Manage Ads</label>
+          <label><input type="checkbox" name="permissions.can_manage_admins" <%= user.permissions?.can_manage_admins ? 'checked' : '' %>> Can Manage Admins</label>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="submit-btn">Update Profile</button>
+  </form>
+
+  <script>
+    function showFieldsForRole(role) {
+      document.getElementById('organizer-fields').classList.toggle('hidden', role !== 'organizer');
+      document.getElementById('promoter-fields').classList.toggle('hidden', role !== 'promoter');
+      document.getElementById('advertiser-fields').classList.toggle('hidden', role !== 'vender');
+    }
+    const roleSelect = document.getElementById('role-select');
+    roleSelect.addEventListener('change', function () {
+      showFieldsForRole(this.value);
+    });
+    showFieldsForRole(roleSelect.value);
+  </script>
+</body>
+</html>

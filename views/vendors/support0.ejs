@@ -1,0 +1,84 @@
+
+<!-- inquiries.ejs -->
+<div class="page">
+  <h2>📨 Customer Inquiries</h2>
+
+  <% if (inquiries.length === 0) { %>
+    <div class="empty-msg">No inquiries yet.</div>
+  <% } else { %>
+    <div class="inquiries-table-wrapper">
+      <table class="inquiries-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Customer Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Message</th>
+            <th>Listing</th>
+            <th>Date</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% inquiries.forEach((inq, i) => { %>
+            <tr>
+              <td><%= i + 1 %></td>
+              <td><%= inq.name %></td>
+              <td><%= inq.email %></td>
+              <td><%= inq.phone %></td>
+              <td><%= inq.message.slice(0, 50) %>...</td>
+              <td><%= inq.listing?.title || 'N/A' %></td>
+              <td><%= new Date(inq.createdAt).toLocaleDateString() %></td>
+              <td>
+                <a href="mailto:<%= inq.email %>" class="respond-btn">Reply</a>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</div>
+
+<style>
+  .inquiries-table-wrapper {
+    overflow-x: auto;
+    margin-top: 20px;
+  }
+  .inquiries-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+  .inquiries-table th, .inquiries-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .inquiries-table thead {
+    background: #1f2937;
+    color: white;
+  }
+  .respond-btn {
+    background: #2563eb;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+  }
+  .respond-btn:hover {
+    background: #1d4ed8;
+  }
+  .empty-msg {
+    padding: 20px;
+    background: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+    border-radius: 6px;
+    margin-top: 16px;
+  }
+</style>

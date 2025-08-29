@@ -1,0 +1,208 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Organizer Profile | South Sudan Events</title>
+  <style>
+
+
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 25px;
+      background: var(--card);
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      flex-wrap: wrap;
+    }
+
+    .profile-header img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .profile-info {
+      flex: 1;
+    }
+
+    .profile-info h2 {
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 5px
+    }
+
+    .verified {
+      color: var(--primary);
+      font-size: 18px;
+    }
+
+    .bio {
+      margin: 10px 0;
+      color: #666;
+    }
+
+    .profile-stats {
+      display: flex;
+      gap: 25px;
+      font-size: 15px;
+      margin-bottom: 15px;
+    }
+
+    .stat {
+      font-weight: bold;
+    }
+
+    .social-links a {
+      color: var(--primary);
+      margin-right: 15px;
+      font-size: 18px;
+      text-decoration: none;
+    }
+
+    .profile-section {
+      margin-top: 40px;
+    }
+
+    .profile-section h3 {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+
+    .profile-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 10px;
+    }
+
+    .profile-card {
+      background: var(--card);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.04);
+      transition: transform 0.2s;
+      width: 250px
+    }
+
+    .profile-card:hover {
+      transform: scale(1.02);
+    }
+
+    .profile-card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+    }
+
+    .profile-card .details {
+      padding: 15px;
+    }
+
+    .profile-card .details h4 {
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    .profile-card .details p {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 15px;
+    }
+
+
+    .view-btn {
+      background-color: transparent;
+      border: 1.5px solid #cd7700;
+      color: white;
+      padding: .2rem .8rem;
+      color: #cd7700;
+      border-radius: 20px;
+      text-decoration: none;
+    }
+
+    .view-btn:hover {
+      background-color: #cd7700;
+      color: white;
+    }
+
+
+    @media (max-width: 600px) {
+      .profile-header {
+        text-align: center;
+        flex-direction: column;
+      }
+
+      .profile-info h2 {
+        justify-content: center;
+      }
+
+      .profile-stats {
+        justify-content: center;
+      }
+
+      .social-links {
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="profile-container">
+  <div class="profile-header">
+    <img class="profile-avatar" src="<%= user.profile_image || 'https://via.placeholder.com/120' %>" alt="<%= user.username %>">
+    <div class="profile-info">
+      <h2><%= user.username %> <span class="verified">✔️</span></h2>
+      <p class="bio"><%= user.bio?.slice(0,250) || 'Event enthusiast and regular attendee.' %>...</p>
+      <div class="profile-stats">
+        <div><span class="stat"><%= totalservices %></span> Events</div>
+        <div><span class="stat"><%= user.followers %></span> Followers</div>
+        <div><span class="stat"><%= user.reviews || '4.5' %></span> ★ Rating</div>
+      </div>
+      <div class="social-links">
+        <% if (user.facebook) { %><a href="<%= user.facebook %>" target="_blank"><i class="fab fa-facebook"></i></a><% } %>
+        <% if (user.instagram) { %><a href="<%= user.instagram %>" target="_blank"><i class="fab fa-instagram"></i></a><% } %>
+        <% if (user.website) { %><a href="<%= user.website %>" target="_blank"><i class="fas fa-globe"></i></a><% } %>
+      </div>
+
+    </div>
+  </div>
+
+<% if (services.length > 0) { %>
+  <div class="profile-section">
+    <h3>Active Events</h3>
+    <div class="profile-grid">
+     <% services.forEach(service => { %>
+      <div class="profile-card">
+        <img src="<%= service.images || 'https://via.placeholder.com/300x180' %>" alt="Event Image" />
+        <div class="details">
+          <h3><%= service.name?.slice(0, 20) %></h3>
+          <p><%= service.description?.slice(0, 80) %>...</p>
+          <div class="rating">
+            <%= '⭐'.repeat(service.rating) %><%= service.rating < 5 ? '☆' : '' %>
+          </div>
+          <a href="/showService/<%= service.type %>/<%= service._id %>" class="view-btn">
+            <%= service.name && (service.name.includes('Book') || service.name.includes('Reserve') || service.name.includes('Hire'))
+              ? service.name.split(' ')[0] + ' Now'
+              : 'View Details' %>
+          </a>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+
+<% } else { %>
+  <p>No events posted yet.</p>
+<% } %>
+
+</div>
+
+</body>
+</html>

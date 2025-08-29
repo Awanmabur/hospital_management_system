@@ -1,0 +1,141 @@
+<%-include("../partials/header") %>
+
+<%-include("../partials/dropdown") %>
+
+<%-include("../partials/flash") %>
+
+
+<div class="booking-container">
+  <div class="left">
+
+    <h2>Promote Your <%= type %></h2>
+
+    <form action="/promote" method="post">
+      <input type="hidden" name="type" value="<%= type %>">
+      <input type="hidden" name="itemId" value="<%= item._id %>">
+
+      <!-- Ticket Selection -->
+
+      <label for="package">Choose Package</label>
+      <select name="package" id="package" required>
+        <option value="silver" data-price="5">Silver - 1 Day - $5</option>
+        <option value="gold" data-price="12">Gold - 3 Days - $12</option>
+        <option value="platinum" data-price="25">Platinum - 7 Days - $25</option>
+      </select>
+
+    <!-- Summary Section -->
+      <div class="summary">
+        <h4>Booking Summary</h4>
+        <p><strong>Event:</strong><%= item.title || item.name %></p>
+        <p><strong>Ticket Type:</strong> <span id="summaryType"></span></p>
+        <p><strong>Quantity:</strong> <span id="summaryQty"></span></p>
+        <p><strong>Price per Ticket:</strong> $<span id="summaryUnit"></span></p>
+        <p class="total"><strong>Total: </strong> $<span id="summaryTotal"></span></p>
+      </div>
+
+  </div>
+
+  <div class="right">
+    <h2>Payment</h2>
+    <label for="paymentMethod">Choose Payment Method</label>
+    <select name="method" id="paymentMethod">
+      <option value="">Select</option>
+      <option value="card">Card (Visa/MasterCard)</option>
+      <option value="mtn">MTN Mobile Money</option>
+      <option value="airtel">Airtel Money</option>
+      <option value="mpesa">M-Pesa</option>
+    </select>
+
+    <div class="payment-option" id="cardSection">
+      <label>Card Number</label>
+      <input type="text" placeholder="1234 5678 9012 3456">
+      <label>Expiry Date</label>
+      <input type="text" placeholder="MM/YY">
+      <label>CVV</label>
+      <input type="text" placeholder="123">
+      <label>Name on Card</label>
+      <input type="text" placeholder="John Doe">
+    </div>
+
+    <div class="payment-option" id="mobileSection">
+      <label>Confirm Phone for Payment</label>
+      <input type="text" placeholder="+2567xxxxxxx">
+    </div>
+
+    <div id="msg"></div>
+    <button type="submit">Proceed to Pay</button>
+
+    </form>
+  </div>
+</div>
+
+
+<script>
+  document.getElementById('package').addEventListener('change', e => {
+    const price = e.target.selectedOptions[0].dataset.price;
+    document.getElementById('priceField').value = price;
+  });
+</script>
+
+<script>
+  const methodSelect = document.getElementById('paymentMethod');
+  const cardSection = document.getElementById('cardSection');
+  const mobileSection = document.getElementById('mobileSection');
+  const msgBox = document.getElementById('msg');
+
+  methodSelect.addEventListener('change', () => {
+    cardSection.style.display = 'none';
+    mobileSection.style.display = 'none';
+
+    const method = methodSelect.value;
+    if (method === 'card') {
+      cardSection.style.display = 'block';
+    } else if (['mtn', 'airtel', 'mpesa'].includes(method)) {
+      mobileSection.style.display = 'block';
+    }
+  });
+
+  document.getElementById('payBtn').addEventListener('click', function (e) {
+    e.preventDefault();
+    msgBox.innerHTML = '';
+
+    const method = methodSelect.value;
+    if (!method) {
+      msgBox.innerHTML = `<div class="error">Select a payment method first!</div>`;
+      return;
+    }
+
+    msgBox.innerHTML = `<div class="success">Processing ${method.toUpperCase()} payment... (Simulated)</div>`;
+    // Replace with actual backend API call here
+  });
+</script>
+
+<script>
+    const ticketTypeSelect = document.getElementById('ticketType');
+    const quantityInput = document.getElementById('quantity');
+    const summaryType = document.getElementById('summaryType');
+    const summaryQty = document.getElementById('summaryQty');
+    const summaryUnit = document.getElementById('summaryUnit');
+    const summaryTotal = document.getElementById('summaryTotal');
+
+    function updateSummary() {
+      const selected = ticketTypeSelect.options[ticketTypeSelect.selectedIndex];
+      const price = parseFloat(selected.dataset.price);
+      const qty = parseInt(quantityInput.value) || 1;
+      const type = selected.value.toUpperCase();
+
+      summaryType.innerText = type;
+      summaryQty.innerText = qty;
+      summaryUnit.innerText = price.toFixed(2);
+      summaryTotal.innerText = (price * qty).toFixed(2);
+    }
+
+    // Attach listeners
+    ticketTypeSelect.addEventListener('change', updateSummary);
+    quantityInput.addEventListener('input', updateSummary);
+
+    // Initialize on load
+    updateSummary();
+  </script>
+
+<%-include("../partials/footer") %>

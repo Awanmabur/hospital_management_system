@@ -1,0 +1,24 @@
+<div class="profile-header">
+  <img src="<%= user.profile_image %>" alt="User Avatar" />
+  <div class="profile-info">
+    <h2><%= user.username %> <span class="verified"><%= user.verified ? '✔️' : '' %></span></h2>
+    <p class="bio"><%= user.bio || 'Event enthusiast and regular attendee.' %></p>
+    <a href="/editUserInfo/<%= user._id %>"><button>edit</button></a>
+    <div class="profile-stats">
+      <div><span class="stat"><%= user.eventsAttendedCount %></span> Events Attended</div>
+      <div><span class="stat"><%= user.followingCount %></span> Following</div>
+      <div><span class="stat"><%= user.rating || 'N/A' %></span> ★ Avg. Rating</div>
+    </div>
+    <div class="social-links">
+      <% if (user.website) { %>
+        <a href="<%= user.website %>"><i>🌐</i> Website</a>
+      <% } %>
+      <% if (user.facebook) { %>
+        <a href="<%= user.facebook %>"><i>📘</i> Facebook</a>
+      <% } %>
+      <% if (user.instagram) { %>
+        <a href="<%= user.instagram %>"><i>📸</i> Instagram</a>
+      <% } %>
+    </div>
+  </div>
+</div>

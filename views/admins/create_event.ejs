@@ -1,0 +1,122 @@
+ 
+ <div class="createEvent-container">
+
+   <!-- Ticket Section -->
+   <div class="createEvent-box">
+     <h2>Ticket Details</h2>
+     <form action="/createEvent" method="post" enctype="multipart/form-data">
+
+       <div class="createEvent-form-group createEvent-checkboxRow">
+         <input type="checkbox" name="is_free" class="createEvent-freeEvent" id="createEvent-freeEvent" />
+         <label for="createEvent-freeEvent" class="createEvent-label">Free Event</label>
+       </div>
+
+       <div class="createEvent-form-group createEvent-ticketPriceWrapper">
+         <label for="createEvent-ordinaryPrice" class="createEvent-label">Ordinary Ticket Price</label>
+         <input type="number" id="createEvent-ordinaryPrice" name="ordinary_price" placeholder="Enter ticket price" class="createEvent-input" />
+       </div>
+
+       <div class="createEvent-form-group">
+         <label for="createEvent-ordinaryTotal" class="createEvent-label">Number of Tickets</label>
+         <input type="number" id="createEvent-ordinaryTotal" name="ordinary_total" placeholder="Enter number of tickets" class="createEvent-input" />
+       </div>
+
+       <div class="createEvent-form-group createEvent-ticketPriceWrapper">
+         <label for="createEvent-vipPrice" class="createEvent-label">VIP Ticket Price</label>
+         <input type="number" id="createEvent-vipPrice" name="vip_price" placeholder="Enter ticket price" class="createEvent-input" />
+       </div>
+
+       <div class="createEvent-form-group">
+         <label for="createEvent-vipTotal" class="createEvent-label">Number of Tickets</label>
+         <input type="number" id="createEvent-vipTotal" name="vip_total" placeholder="Enter number of tickets" class="createEvent-input" />
+       </div>
+
+       <div class="createEvent-form-group createEvent-ticketPriceWrapper">
+         <label for="createEvent-tablePrice" class="createEvent-label">Table Price</label>
+         <input type="number" id="createEvent-tablePrice" name="table_price" placeholder="Enter ticket price" class="createEvent-input" />
+       </div>
+
+       <div class="createEvent-form-group">
+         <label for="createEvent-tableTotal" class="createEvent-label">Number of Tickets</label>
+         <input type="number" id="createEvent-tableTotal" name="table_total" placeholder="Enter number of tickets" class="createEvent-input" />
+       </div>
+
+       <button type="submit" class="createEvent-btn">Create Event</button>
+   </div>
+
+   <!-- Event Section -->
+   <div class="createEvent-box">
+     <h2>Event Details</h2>
+
+     <div class="createEvent-form-group">
+       <label for="createEvent-titleInput" class="createEvent-label">Event Name</label>
+       <input type="text" id="createEvent-titleInput" name="title" placeholder="Enter event name" class="createEvent-input" />
+     </div>
+
+     <div class="createEvent-form-group">
+       <label for="createEvent-date" class="createEvent-label">Event Date</label>
+       <input type="date" id="createEvent-date" name="date" required class="createEvent-input" />
+     </div>
+
+     <div class="createEvent-form-group">
+       <label for="createEvent-mode" class="createEvent-label">Event Mode</label>
+       <select id="createEvent-mode" name="event_mode" class="createEvent-select" onchange="createEventToggleLocation()">
+         <option value="offline">Offline</option>
+         <option value="online">Online</option>
+       </select>
+     </div>
+
+     <div class="createEvent-form-group" id="createEvent-locationWrapper">
+       <label for="createEvent-location" class="createEvent-label">Location</label>
+       <input type="text" id="createEvent-location" name="location" placeholder="Enter physical location" class="createEvent-input" />
+     </div>
+
+     <div class="createEvent-form-group">
+       <label for="createEvent-category" class="createEvent-label">Event Category</label>
+       <select id="createEvent-category" name="category" required class="createEvent-select">
+         <option value="">Select Category</option>
+         <option value="music">Music</option>
+         <option value="fashion">Fashion</option>
+         <option value="sports">Sports</option>
+         <option value="business">Business</option>
+         <option value="education">Education</option>
+         <option value="religion">Religion</option>
+         <option value="others">Others</option>
+       </select>
+     </div>
+
+     <div class="createEvent-form-group">
+       <label for="createEvent-time" class="createEvent-label">Event Time</label>
+       <input type="time" id="createEvent-time" name="time" class="createEvent-input" />
+     </div>
+
+     <div class="createEvent-form-group">
+       <label for="createEvent-image" class="createEvent-label">Cover Image</label>
+       <input type="file" id="createEvent-image" name="imageUrl" class="createEvent-input" />
+     </div>
+
+     <div class="createEvent-form-group">
+       <label for="createEvent-description" class="createEvent-label">Description</label>
+       <textarea id="createEvent-description" rows="4" name="description" placeholder="Describe the event..." class="createEvent-textarea"></textarea>
+     </div>
+
+   </form>
+   </div>
+ </div>
+
+ <script>
+   function createEventToggleLocation() {
+     const eventType = document.getElementById("createEvent-mode").value;
+     const locationInput = document.getElementById("createEvent-location");
+
+     if (eventType === "online") {
+       locationInput.disabled = true;
+       locationInput.placeholder = "Not required for online event";
+       locationInput.value = "";
+     } else {
+       locationInput.disabled = false;
+       locationInput.placeholder = "Enter physical location";
+     }
+   }
+   window.onload = createEventToggleLocation;
+ </script>

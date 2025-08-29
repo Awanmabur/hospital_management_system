@@ -1,0 +1,62 @@
+<% if (results.length === 0) { %>
+    <p>No event found now, please come back later.</p>
+    <% } else { %>
+
+     <section class="section">
+
+       <div class="events" id="eventScroll">
+         <% results.forEach(event => { %>
+           <div class="card">
+             <img src="<%= event.image || 'https://via.placeholder.com/400x250' %>" alt="<%= event.title %>" />
+
+             <div class="button-row">
+               <!-- Profile image -->
+               <div class="profile-img">
+                 <img src="https://via.placeholder.com/40" alt="Profile">
+               </div>
+
+               <!-- Stats: views, likes, shares -->
+               <div class="right-buttons">
+                 <div class="stat">
+                   <div class="stat-count">1.2k</div>
+                   <i class="fa-solid fa-eye stat-icon"></i>
+                 </div>
+
+                 <div class="stat" onclick="toggleLike(this)">
+                   <div class="stat-count" id="likeCount"><%= event.views %></div>
+                   <i class="fa-regular fa-heart stat-icon heart"></i>
+                 </div>
+
+                 <div class="stat">
+                   <div class="stat-count">89</div>
+                   <i class="fa-solid fa-share stat-icon"></i>
+                 </div>
+               </div>
+             </div>
+
+             <div class="card-body">
+               <h3><%= event.title?.slice(0, 55) %>....</h3>
+               <p>📅 <%= new Date(event.date).toDateString() %> | <i style="font-size: 14px; margin-left: 5px;" class="fa fa-map-marker" aria-hidden="true"></i> <%= event.location %></p>
+
+               <% if (event.is_free) { %>
+                 <p>🎟️ Free</p>
+               <% } else {
+                   const cheapest = event.ticket_types.reduce((min, ticket) => ticket.current_price < min ? ticket.current_price : min, event.ticket_types[0].current_price);
+                   const totalSold = event.ticket_types.reduce((sum, ticket) => sum + ticket.sold, 0);
+                   const totalAvailable = event.ticket_types.reduce((sum, ticket) => sum + ticket.total_available, 0);
+                   const ticketsLeft = totalAvailable - totalSold;
+               %>
+                 <p>💸 From $<%= cheapest %> | 🔥 Only <%= ticketsLeft %> left</p>
+               <% } %>
+
+               <div class="actionbtn">
+                 <a class="bookingbtn" href="/show/<%= event.type %>/<%= event._id %>">Book ticket</a>
+                 <a class="detailsbtn" href="/show/<%= event.type %>/<%= event._id %>">View details</a>
+               </div>
+             </div>
+           </div>
+         <% }); %>
+       </div>
+ 
+     </section>
+<% } %>

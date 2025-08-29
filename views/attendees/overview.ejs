@@ -1,0 +1,65 @@
+
+  <h1>Dashboard Overview</h1>
+
+  <section class="stats-cards" aria-label="Attendee summary statistics">
+    <div class="card">
+      <h3><%= attendingEvents.length %></h3>
+      <p>Events Attending</p>
+    </div>
+    <div class="card">
+      <h3><%= tickets %></h3>
+      <p>Tickets Purchased</p>
+    </div>
+    <div class="card">
+      <h3><%= totalReviews %></h3>
+      <p>Events Reviewed</p>
+    </div>
+    <div class="card">
+      <h3><%= savedEvents.length %></h3>
+      <p>Saved Events</p>
+    </div>
+  </section>
+
+
+  <section>
+    <h2 class="section-title">Upcoming Events</h2>
+    <div class="events-overview">
+      <% events.forEach(event => { %>
+        <article class="event-card" tabindex="0">
+          <img class="event-image" src="<%= event.image %>" alt="<%= event.title %>" />
+          <div class="event-details">
+            <h3 class="event-title"><%= event.title %></h3>
+            <p>📅 <%= new Date(event.date).toDateString() %> | <i style="font-size: 16px" class="fa fa-map-marker" aria-hidden="true"></i> <%= event.location %></p>
+
+            <% if (event.is_free) { %>
+              <p>🎟️ Free</p>
+            <% } else {
+                const cheapest = event.ticket_types.reduce((min, ticket) => ticket.current_price < min ? ticket.current_price : min, event.ticket_types[0].current_price);
+                const totalSold = event.ticket_types.reduce((sum, ticket) => sum + ticket.sold, 0);
+                const totalAvailable = event.ticket_types.reduce((sum, ticket) => sum + ticket.total_available, 0);
+                const ticketsLeft = totalAvailable - totalSold;
+            %>
+              <p>💸 From $<%= cheapest %> | 🔥 Only <%= ticketsLeft %> left</p>
+            <% } %>
+            <div class="event-actions">
+              <button class="btn btn-edit">Edit</button>
+              <button class="btn btn-view">View</button>
+            </div>
+          </div>
+        </article>
+      <% }) %>
+    </div>
+  </section>
+
+
+
+  <section>
+    <h2 class="section-title">Notifications</h2>
+    <div class="notifications" role="list" aria-label="Notifications list">
+      <% notifications.forEach(note => { %>
+        <div class="notification-item"><%= note.message %></div>
+      <% }) %>
+    </div>
+  </section>
+
+ 

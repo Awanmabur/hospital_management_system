@@ -1,0 +1,25 @@
+<% if (djs.length > 0) { %>
+
+  <% djs.forEach(service => { %>
+    <% if (service.category === 'dj') { %>
+
+      <div class="services-card" >
+        <img src="<%= service.images %>" alt="">
+        <h3><%= service.name %></h3>
+        <p><%= service.description?.slice(0, 100) %>.... %></p>
+        <div class="rating">
+          <%= '⭐'.repeat(service.rating) %><%= service.rating < 5 ? '☆' : '' %>
+        </div>
+        <a href="<%= service.link %>">
+          <%= service.title && (service.title.includes('Book') || service.title.includes('Reserve') || service.title.includes('Hire'))
+      ? service.title.split(' ')[0] + ' Now'
+      : 'View Details' %>
+
+        </a>
+      </div>
+    <% } %>
+  <% }); %>
+
+<% } else { %>
+<p>No item found now, please come back later.</p>
+<% } %>

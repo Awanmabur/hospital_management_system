@@ -1,0 +1,378 @@
+<div class="filter-section">
+  <div class="filter-title">🎯 Filter Events</div>
+  <div class="filter-grid">
+    <div class="filter-group">
+      <label for="category">Event Type</label>
+      <select id="category">
+        <option value="">All Categories</option>
+        <option>Concert</option>
+        <option>Wedding</option>
+        <option>Workshop</option>
+        <option>Conference</option>
+        <option>Festival</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="location">Location</label>
+      <input type="text" id="location" placeholder="City or venue">
+    </div>
+
+    <div class="filter-group">
+      <label for="start-date">Start Date</label>
+      <input type="date" id="start-date">
+    </div>
+
+    <div class="filter-group">
+      <label for="end-date">End Date</label>
+      <input type="date" id="end-date">
+    </div>
+
+    <div class="filter-group">
+      <label for="price">Price Range</label>
+      <select id="price">
+        <option value="">All Prices</option>
+        <option>Free</option>
+        <option>Under $10</option>
+        <option>$10 - $50</option>
+        <option>$50 - $100</option>
+        <option>$100+</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="filter-actions">
+    <button type="button">Apply Filters</button>
+  </div>
+
+  <div class="controller">
+    <div class="controller-item active" data-filter="all">All</div>
+    <div class="controller-item" data-filter="for-You">For You</div>
+    <div class="controller-item" data-filter="nearby">Nearby</div>
+    <div class="controller-item" data-filter="today">Today</div>
+    <div class="controller-item" data-filter="tomorrow">Tomorrow</div>
+    <div class="controller-item" data-filter="this-weekend">This Weekend</div>
+    <div class="controller-item" data-filter="online">Lives</div>
+    <div class="controller-item" data-filter="next-Week">Next Week</div>
+    <div class="controller-item" data-filter="this-Month">This Month</div>
+    <div class="controller-item" data-filter="next-Month">Next Month</div>
+  </div>
+
+</div>
+
+
+<% if (services.length > 0) { %>
+
+<div class="services-wrapper">
+
+  <div class="section-header">
+    <h2 class="services-header">Explore Our Services</h2>
+  </div>
+
+  <div class="services-scroll">
+    <% services.forEach(service => { %>
+      <div class="service-card">
+        <img src="<%= service.images %>" alt="Service Image">
+        <div class="service-content">
+          <h3><%= service.name?.slice(0, 20) %></h3>
+          <p><%= service.description?.slice(0, 80) %>...</p>
+          <div class="rating">
+            <%= '⭐'.repeat(service.rating) %><%= service.rating < 5 ? '☆' : '' %>
+          </div>
+          <a href="/showService/<%= service.type %>/<%= service._id %>" class="service-link">
+            <%= service.name && (service.name.includes('Book') || service.name.includes('Reserve') || service.name.includes('Hire'))
+              ? service.name.split(' ')[0] + ' Now'
+              : 'View Details' %>
+          </a>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+</div>
+
+<% } else { %>
+ <p style="text-align:center; font-size:1em; margin-top: 25px; margin-bottom: -30px">No service found now, please come back later.</p>
+<% } %>
+
+
+<section class="section" data-tags="tomorrow, this-weekend, this-month, next-month, online, today">
+
+  <div class="section-header">
+    <h2>Trendings services</h2>
+  </div>
+
+  <div class="trending-events">
+    <% services.forEach(service => { %>
+      <div class="trending-card">
+        <img src="<%= service.images || 'https://via.placeholder.com/400x250' %>" alt="<%= service.title %>" />
+
+        <div class="card-body">
+          <h3><%= service.name?.slice(0, 25) %>....</h3>
+          <p><%= service.description?.slice(0, 80) %>...</p>
+          <div class="rating">
+            <%= '⭐'.repeat(service.rating) %><%= service.rating < 5 ? '☆' : '' %>
+          </div>
+          <a href="/showService/<%= service.type %>/<%= service._id %>" class="service-link">
+            <%= service.name && (service.name.includes('Book') || service.name.includes('Reserve') || service.name.includes('Hire'))
+              ? service.name.split(' ')[0] + ' Now'
+              : 'View Details' %>
+          </a>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+</section>
+
+
+
+<% if (hotels.length > 1) { %>
+
+<div class="services-wrapper">
+
+  <div class="section-header">
+    <h2 class="services-header">Explore Our hotels</h2>
+  </div>
+
+  <div class="services-scroll">
+    <% hotels.forEach(service => { %>
+      <div class="service-card">
+        <img src="<%= service.images %>" alt="Service Image">
+        <div class="service-content">
+          <h3><%= service.name?.slice(0, 20) %></h3>
+          <p><%= service.description?.slice(0, 80) %>...</p>
+          <div class="rating">
+            <%= '⭐'.repeat(service.rating) %><%= service.rating < 5 ? '☆' : '' %>
+          </div>
+          <a href="/showService/<%= service.type %>/<%= service._id %>" class="service-link">
+            <%= service.name && (service.name.includes('Book') || service.name.includes('Reserve') || service.name.includes('Hire'))
+              ? service.name.split(' ')[0] + ' Now'
+              : 'View Details' %>
+          </a>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+</div>
+
+<% } %>
+
+
+<% if (cars.length > 1) { %>
+<div class="services-wrapper">
+
+  <div class="section-header">
+    <h2 class="services-header">Explore Our Services cars</h2>
+  </div>
+
+  <div class="services-scroll">
+    <% cars.forEach(service => { %>
+      <div class="service-card">
+        <img src="<%= service.images %>" alt="Service Image">
+        <div class="service-content">
+          <h3><%= service.name?.slice(0, 20) %></h3>
+          <p><%= service.description?.slice(0, 80) %>...</p>
+          <div class="rating">
+            <%= '⭐'.repeat(service.rating) %><%= service.rating < 5 ? '☆' : '' %>
+          </div>
+          <a href="/showService/<%= service.type %>/<%= service._id %>" class="service-link">
+            <%= service.name && (service.name.includes('Book') || service.name.includes('Reserve') || service.name.includes('Hire'))
+              ? service.name.split(' ')[0] + ' Now'
+              : 'View Details' %>
+          </a>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+</div>
+
+<% } %>
+
+
+<% if (eventhalls.length > 1) { %>
+<div class="services-wrapper">
+
+  <div class="section-header">
+    <h2 class="services-header">Explore Our Services hall</h2>
+  </div>
+
+  <div class="services-scroll">
+    <% eventhalls.forEach(service => { %>
+      <div class="service-card">
+        <img src="<%= service.images %>" alt="Service Image">
+        <div class="service-content">
+          <h3><%= service.name?.slice(0, 20) %></h3>
+          <p><%= service.description?.slice(0, 80) %>...</p>
+          <div class="rating">
+            <%= '⭐'.repeat(service.rating) %><%= service.rating < 5 ? '☆' : '' %>
+          </div>
+          <a href="/showService/<%= service.type %>/<%= service._id %>" class="service-link">
+            <%= service.name && (service.name.includes('Book') || service.name.includes('Reserve') || service.name.includes('Hire'))
+              ? service.name.split(' ')[0] + ' Now'
+              : 'View Details' %>
+          </a>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+</div>
+
+<% } %>
+
+
+<% if (djs.length > 1) { %>
+<div class="services-wrapper">
+
+  <div class="section-header">
+    <h2 class="services-header">Explore Our Services djs</h2>
+  </div>
+
+  <div class="services-scroll">
+    <% djs.forEach(service => { %>
+      <div class="service-card">
+        <img src="<%= service.images %>" alt="Service Image">
+        <div class="service-content">
+          <h3><%= service.name?.slice(0, 20) %></h3>
+          <p><%= service.description?.slice(0, 80) %>...</p>
+          <div class="rating">
+            <%= '⭐'.repeat(service.rating) %><%= service.rating < 5 ? '☆' : '' %>
+          </div>
+          <a href="/showService/<%= service.type %>/<%= service._id %>" class="service-link">
+            <%= service.name && (service.name.includes('Book') || service.name.includes('Reserve') || service.name.includes('Hire'))
+              ? service.name.split(' ')[0] + ' Now'
+              : 'View Details' %>
+          </a>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+</div>
+
+<% } %>
+
+
+
+<% if (decorators.length > 1) { %>
+<div class="services-wrapper">
+
+  <div class="section-header">
+    <h2 class="services-header">Explore Our Services</h2>
+  </div>
+
+  <div class="services-scroll">
+    <% decorators.forEach(service => { %>
+      <div class="service-card">
+        <img src="<%= service.images %>" alt="Service Image">
+        <div class="service-content">
+          <h3><%= service.name?.slice(0, 20) %></h3>
+          <p><%= service.description?.slice(0, 80) %>...</p>
+          <div class="rating">
+            <%= '⭐'.repeat(service.rating) %><%= service.rating < 5 ? '☆' : '' %>
+          </div>
+          <a href="/showService/<%= service.type %>/<%= service._id %>" class="service-link">
+            <%= service.name && (service.name.includes('Book') || service.name.includes('Reserve') || service.name.includes('Hire'))
+              ? service.name.split(' ')[0] + ' Now'
+              : 'View Details' %>
+          </a>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+</div>
+
+<% } %>
+
+
+<% if (caterers.length > 1) { %>
+<div class="services-wrapper">
+
+  <div class="section-header">
+    <h2 class="services-header">Explore Our Services caterers</h2>
+  </div>
+
+  <div class="services-scroll">
+    <% caterers.forEach(service => { %>
+      <div class="service-card">
+        <img src="<%= service.images %>" alt="Service Image">
+        <div class="service-content">
+          <h3><%= service.name?.slice(0, 20) %></h3>
+          <p><%= service.description?.slice(0, 80) %>...</p>
+          <div class="rating">
+            <%= '⭐'.repeat(service.rating) %><%= service.rating < 5 ? '☆' : '' %>
+          </div>
+          <a href="/showService/<%= service.type %>/<%= service._id %>" class="service-link">
+            <%= service.name && (service.name.includes('Book') || service.name.includes('Reserve') || service.name.includes('Hire'))
+              ? service.name.split(' ')[0] + ' Now'
+              : 'View Details' %>
+          </a>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+</div>
+
+<% } %>
+
+
+
+<% if (makeup_artists.length > 1) { %>
+<div class="services-wrapper">
+
+  <div class="section-header">
+    <h2 class="services-header">Explore Our Services</h2>
+  </div>
+
+  <div class="services-scroll">
+    <% makeup_artists.forEach(service => { %>
+      <div class="service-card">
+        <img src="<%= service.images %>" alt="Service Image">
+        <div class="service-content">
+          <h3><%= service.name?.slice(0, 20) %></h3>
+          <p><%= service.description?.slice(0, 80) %>...</p>
+          <div class="rating">
+            <%= '⭐'.repeat(service.rating) %><%= service.rating < 5 ? '☆' : '' %>
+          </div>
+          <a href="/showService/<%= service.type %>/<%= service._id %>" class="service-link">
+            <%= service.name && (service.name.includes('Book') || service.name.includes('Reserve') || service.name.includes('Hire'))
+              ? service.name.split(' ')[0] + ' Now'
+              : 'View Details' %>
+          </a>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+</div>
+
+<% } %>
+
+
+
+<% if (photographers.length > 1) { %>
+<div class="services-wrapper">
+
+  <div class="section-header">
+    <h2 class="services-header">Explore Our Services</h2>
+  </div>
+
+  <div class="services-scroll">
+    <% photographers.forEach(service => { %>
+      <div class="service-card">
+        <img src="<%= service.images %>" alt="Service Image">
+        <div class="service-content">
+          <h3><%= service.name?.slice(0, 20) %></h3>
+          <p><%= service.description?.slice(0, 80) %>...</p>
+          <div class="rating">
+            <%= '⭐'.repeat(service.rating) %><%= service.rating < 5 ? '☆' : '' %>
+          </div>
+          <a href="/showService/<%= service.type %>/<%= service._id %>" class="service-link">
+            <%= service.name && (service.name.includes('Book') || service.name.includes('Reserve') || service.name.includes('Hire'))
+              ? service.name.split(' ')[0] + ' Now'
+              : 'View Details' %>
+          </a>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+</div>
+
+
+<% } %>

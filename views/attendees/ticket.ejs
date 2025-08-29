@@ -1,0 +1,30 @@
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Booking ID</th>
+          <th>Type</th>
+          <th>Ticket Type</th>
+          <th>Quantity</th>
+          <th>Total Paid</th>
+          <th>Status</th>
+          <th>Issued On</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% bookings.forEach(booking => { %>
+          <tr>
+            <td><%= booking.booking_reference.slice(5, 12) %></td>
+            <td><%= booking.for_type %></td>
+            <td><%= booking.ticket_types %></td>
+            <td><%= booking.quantity %></td>
+            <td>$<%= booking.total_paid %></td>
+            <td><%= booking.status %></td>
+            <td><%= booking.createdAt.toISOString().substring(0,10) %></td>
+            <td> <a href="/myticket/<%= booking._id %>">view</a> </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>

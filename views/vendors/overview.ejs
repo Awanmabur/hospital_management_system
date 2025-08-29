@@ -1,0 +1,58 @@
+
+  <h1>Dashboard Overview</h1>
+
+  <div class="summary-cards">
+    <div class="finance-card">
+      <p><%= totalListings %></p>
+      <h3>Total Listings</h3>
+    </div>
+    <div class="finance-card">
+      <p><%= totalViews %></p>
+      <h3>Total Views</h3>
+    </div>
+    <div class="finance-card">
+      <p><%= totalInquiries %></p>
+      <h3>Inquiries</h3>
+    </div>
+    <div class="finance-card">
+      <p><%= totalListings %></p>
+      <h3>Pending Listings</h3>
+    </div>
+  </div>
+
+
+  <section>
+    <h2 class="section-title">My services</h2>
+    <div class="events-overview">
+      <% services.forEach(service => { %>
+        <article class="event-card" tabindex="0">
+          <img
+            class="event-image"
+            src="<%= service.image %>"
+            alt="<%= service.title %>"
+          />
+          <div class="event-details">
+            <h3 class="event-title"><%= service.title?.slice(0,20) %>...</h3>
+            <p class="event-info">📅 <%= new Date(service.date).toDateString() %> | <i style="font-size: 14px; margin-left: 5px;" class="fa fa-map-marker" aria-hidden="true"></i> <%= services.location %></p>
+          </div>
+          <div class="event-actions">
+            <a class="view-btn" href="/edit/<%= service._id %>">Edit</a>
+            <a class="view-btn" href="/show/<%= service.type %>/<%= service._id %>">View</a>
+          </div>
+        </article>
+      <% }) %>
+    </div>
+  </section>
+
+
+  <section>
+    <h2 class="section-title">Notifications</h2>
+    <div class="notifications" role="list" aria-label="Notifications list">
+      <div class="notification-item">Your event "South Sudan Music Fest 2025" sold 50 tickets today!</div>
+      <div class="notification-item">New message from attendee Mary Deng.</div>
+      <div class="notification-item">Ticket sales for "Tech Summit" reached 75% capacity.</div>
+      <div class="notification-item">You received a 5-star review for "Food & Culture Fest".</div>
+    </div>
+  </section>
+
+   

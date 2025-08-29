@@ -1,0 +1,52 @@
+<div class="sidebar" id="sidebar">
+  <h2>Dashboard</h2>
+
+  <div class="tab" data-label="Dashboard" onclick="showSection('dashboard')">
+    <i class="fas fa-chart-line"></i><span>Dashboard</span>
+  </div>
+
+  <div class="tab" data-label="Profile" onclick="showSection('profile')">
+    <i class="fas fa-user-shield"></i><span>Profile</span>
+  </div>
+
+  <div class="tab" data-label="Promote Events" onclick="showSection('promote-events')">
+    <i class="fas fa-bullhorn"></i><span>Events Promoted</span>
+  </div>
+
+  <div class="tab" data-label="Wallet" onclick="showSection('wallet')">
+    <i class="fas fa-wallet"></i><span>Wallet</span>
+  </div>
+
+  <div class="tab" data-label="Withdrawal Requests" onclick="showSection('withdrawals')">
+    <i class="fas fa-university"></i><span>Withdrawals</span>
+  </div>
+
+  <div class="tab" data-label="Analytics" onclick="showSection('analytics')">
+    <i class="fas fa-chart-pie"></i><span>Analytics</span>
+  </div>
+
+  <div class="tab" data-label="Notifications" onclick="showSection('notification')">
+    <i class="fas fa-bell"></i><span>Notifications</span>
+  </div>
+
+  <div class="tab" data-label="Support" onclick="showSection('support')">
+    <i class="fas fa-headset"></i><span>Support</span>
+  </div>
+
+  <div class="tab" data-label="Feedback" onclick="showSection('feedback')">
+    <i class="fas fa-comment-dots"></i><span>Feedback</span>
+  </div>
+
+  <div class="tab" data-label="Settings" onclick="showSection('setting')">
+    <i class="fas fa-cog"></i><span>Settings</span>
+  </div>
+
+  <div class="tab" data-label="Logout" onclick="location.href='/logout'"><i class="fas fa-sign-out-alt"></i><span>Logout</span></div>
+
+
+</div>
+
+<button class="collapse-toggle" onclick="toggleSidebar()" id="collapseBtn"><i class="fa fa-angle-left" aria-hidden="true"></i></button>
+
+
+<div id="tooltip"></div>

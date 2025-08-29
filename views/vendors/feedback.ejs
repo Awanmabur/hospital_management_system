@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Feedback Page</title>
+  <style>
+
+
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    input[type="search"], select {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      width: 100%;
+      max-width: 300px;
+      font-size: 16px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 14px 10px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+
+    th {
+      /*background-color: #f0f4f8;*/
+      font-weight: 600;
+    }
+
+    tr:hover {
+      /*background-color: #f9f9f9;*/
+    }
+
+    .status {
+      cursor: pointer;
+      padding: 5px 10px;
+      border-radius: 6px;
+      color: white;
+    }
+
+    .status.New {
+      background-color: #f97316;
+    }
+
+    .status.Resolved {
+      background-color: #10b981;
+    }
+
+    .reply-btn {
+      background: #3b82f6;
+      color: #fff;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+      gap: 10px;
+    }
+
+    .pagination button {
+      padding: 8px 12px;
+      border: none;
+      background: #3b82f6;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 500px;
+    }
+
+    .modal-content textarea {
+      width: 100%;
+      height: 120px;
+      padding: 10px;
+      font-size: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .modal-content button {
+      margin-top: 10px;
+      padding: 8px 15px;
+      background: #16a34a;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .top-bar {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+    <h2>Feedback Dashboard</h2>
+
+    <div class="top-bar">
+      <input type="search" id="searchInput" placeholder="Search feedback...">
+      <select id="typeFilter">
+        <option value="">All Types</option>
+        <option value="Suggestion">Suggestion</option>
+        <option value="Complaint">Complaint</option>
+        <option value="Question">Question</option>
+      </select>
+    </div>
+
+    <table id="feedbackTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Subject</th>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Reply</th>
+        </tr>
+      </thead>
+      <tbody id="feedbackBody">
+        <!-- Dynamic rows inserted by JS -->
+      </tbody>
+    </table>
+
+    <div class="pagination" id="pagination"></div>
+
+
+  <!-- Reply Modal -->
+  <div class="modal" id="replyModal">
+    <div class="modal-content">
+      <h3>Reply to Feedback</h3>
+      <textarea id="replyMessage" placeholder="Write your reply..."></textarea>
+      <button onclick="sendReply()">Send Reply</button>
+    </div>
+  </div>
+
+  <script>
+    const feedbacks = [
+      { name: "John Doe", email: "john@example.com", subject: "Login Issue", type: "Complaint", status: "New" },
+      { name: "Jane Smith", email: "jane@example.com", subject: "Event Suggestions", type: "Suggestion", status: "Resolved" },
+      { name: "Ali Musa", email: "ali@demo.com", subject: "Refund Process", type: "Question", status: "New" },
+      { name: "Diana King", email: "diana@site.com", subject: "App crashes", type: "Complaint", status: "New" },
+      { name: "Ben Kamau", email: "ben@web.com", subject: "Add comedy events", type: "Suggestion", status: "Resolved" },
+      // Add more for testing pagination
+    ];
+
+    const perPage = 3;
+    let currentPage = 1;
+    let selectedReply = null;
+
+    function renderTable(data) {
+      const tbody = document.getElementById('feedbackBody');
+      tbody.innerHTML = '';
+
+      const start = (currentPage - 1) * perPage;
+      const end = start + perPage;
+      const pageData = data.slice(start, end);
+
+      pageData.forEach((fb, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${fb.name}</td>
+          <td>${fb.email}</td>
+          <td>${fb.subject}</td>
+          <td>${fb.type}</td>
+          <td><span class="status ${fb.status}" onclick="toggleStatus(${start + index})">${fb.status}</span></td>
+          <td><button class="reply-btn" onclick="openReply(${start + index})">Reply</button></td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      renderPagination(data.length);
+    }
+
+    function renderPagination(total) {
+      const totalPages = Math.ceil(total / perPage);
+      const pag = document.getElementById('pagination');
+      pag.innerHTML = '';
+
+      for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement('button');
+        btn.textContent = i;
+        btn.onclick = () => {
+          currentPage = i;
+          filterTable();
+        };
+        if (i === currentPage) {
+          btn.style.background = '#2563eb';
+        }
+        pag.appendChild(btn);
+      }
+    }
+
+    function filterTable() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      const typeFilter = document.getElementById('typeFilter').value;
+      const filtered = feedbacks.filter(fb =>
+        (fb.name.toLowerCase().includes(searchTerm) ||
+         fb.email.toLowerCase().includes(searchTerm) ||
+         fb.subject.toLowerCase().includes(searchTerm)) &&
+        (!typeFilter || fb.type === typeFilter)
+      );
+      renderTable(filtered);
+    }
+
+    function toggleStatus(index) {
+      feedbacks[index].status = feedbacks[index].status === "New" ? "Resolved" : "New";
+      filterTable();
+    }
+
+    function openReply(index) {
+      selectedReply = index;
+      document.getElementById('replyMessage').value = '';
+      document.getElementById('replyModal').style.display = 'flex';
+    }
+
+    function sendReply() {
+      const message = document.getElementById('replyMessage').value;
+      if (!message.trim()) return alert("Reply message cannot be empty.");
+      alert(`Reply sent to ${feedbacks[selectedReply].email}:\n\n${message}`);
+      document.getElementById('replyModal').style.display = 'none';
+    }
+
+    // Close modal on outside click
+    window.onclick = function(event) {
+      const modal = document.getElementById('replyModal');
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    }
+
+    document.getElementById('searchInput').addEventListener('input', filterTable);
+    document.getElementById('typeFilter').addEventListener('change', filterTable);
+
+    filterTable(); // Initial render
+  </script>
+</body>
+</html>

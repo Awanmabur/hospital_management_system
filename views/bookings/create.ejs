@@ -1,0 +1,186 @@
+<%-include("../partials/header") %>
+
+<%-include("../partials/dropdown") %>
+
+<%-include("../partials/flash") %>
+
+
+<div class="booking-container">
+  <div class="left">
+    <h2>Booking Details</h2>
+    <form action="/book/submit" method="post">
+
+    <input type="hidden" name="for_type" value="<%= type %>">
+    <input type="hidden" name="itemId" value="<%= item._id %>">
+    <input type="hidden" name="promoterRef" id="promoterRefInput" />
+
+      <!-- Ticket Selection -->
+
+    <label>Full Name</label>
+    <input type="text" name="full_name" id="name" required>
+
+    <label>Email Address</label>
+    <input type="email" name="email" id="email" required>
+
+    <label>Phone Number</label>
+    <input type="text" name="phone" id="phone" required>
+
+    <label>Promo/Referral Code (Optional)</label>
+    <input type="text" name="shareRef" id="shareRefInput">
+
+    <% if (item.type === 'event') { %>
+      <label for="ticketType">Select Ticket Type:</label>
+      <select name="ticket_types" id="ticketType" required onchange="updatePrice()">
+        <% item.ticket_types.forEach(t => { %>
+          <option value="<%= t.type %>" data-price="<%= t.current_price %>">
+            <%= t.type.toUpperCase() %> - $<%= t.current_price %> (Available: <%= t.total_available - t.sold %>)
+          </option>
+        <% }) %>
+      </select>
+    <% } else if (item.category === 'hotel') { %>
+      <p>
+        Price: $<span id="servicePrice"><%= item.price_per_night %></span>
+      </p>
+      <input type="hidden" name="ticket_types" value="standard">
+    <% } %>
+
+    <label for="quantity">Quantity:</label>
+    <input type="number" name="quantity" id="quantity" value="1" min="1" required onchange="updatePrice()">
+
+    <!-- Summary Section -->
+      <div class="summary">
+        <h4>Booking Summary</h4>
+        <p><strong>Event:</strong><%= item.title || item.name %></p>
+        <p><strong>Ticket Type:</strong> <span id="summaryType"></span></p>
+        <p><strong>Quantity:</strong> <span id="summaryQty"></span></p>
+        <p><strong>Price per Ticket:</strong> $<span id="summaryUnit"></span></p>
+        <p class="total"><strong>Total: </strong> $<span id="summaryTotal"></span></p>
+      </div>
+
+  </div>
+
+  <div class="right">
+    <h2>Payment</h2>
+    <label for="paymentMethod">Choose Payment Method</label>
+    <select name="method" id="paymentMethod">
+      <option value="">Select</option>
+      <option value="card">Card (Visa/MasterCard)</option>
+      <option value="mtn">MTN Mobile Money</option>
+      <option value="airtel">Airtel Money</option>
+      <option value="mpesa">M-Pesa</option>
+    </select>
+
+    <div class="payment-option" id="cardSection">
+      <label>Card Number</label>
+      <input type="text" placeholder="1234 5678 9012 3456">
+      <label>Expiry Date</label>
+      <input type="text" placeholder="MM/YY">
+      <label>CVV</label>
+      <input type="text" placeholder="123">
+      <label>Name on Card</label>
+      <input type="text" placeholder="John Doe">
+    </div>
+
+    <div class="payment-option" id="mobileSection">
+      <label>Confirm Phone for Payment</label>
+      <input type="text" placeholder="+2567xxxxxxx">
+    </div>
+
+    <div id="msg"></div>
+    <button type="submit">Proceed to Pay</button>
+
+    </form>
+  </div>
+</div>
+
+<% if (user && user.role === 'promoter' && promoterRef && promoterRef.toString() === user._id.toString()) { %>
+  <div class="alert alert-info">
+    You're viewing your own share link; commission will not apply on your own booking.
+  </div>
+<% } %>
+
+<script>
+  // Populate hidden fields from either session-captured URL params or localStorage fallback
+  const params = new URLSearchParams(window.location.search);
+  let shareRef = params.get("shareRef");
+  let promoterRef = params.get("promoterRef");
+
+  if (!shareRef) {
+    // fallback to localStorage
+    const attr = localStorage.getItem("shareAttribution");
+    if (attr) {
+      try {
+        const parsed = JSON.parse(attr);
+        shareRef = parsed.shareRef || shareRef;
+        promoterRef = parsed.promoterRef || promoterRef;
+      } catch {}
+    }
+  }
+
+  if (shareRef) document.getElementById("shareRefInput").value = shareRef;
+  if (promoterRef) document.getElementById("promoterRefInput").value = promoterRef;
+</script>
+
+<script>
+  const methodSelect = document.getElementById('paymentMethod');
+  const cardSection = document.getElementById('cardSection');
+  const mobileSection = document.getElementById('mobileSection');
+  const msgBox = document.getElementById('msg');
+
+  methodSelect.addEventListener('change', () => {
+    cardSection.style.display = 'none';
+    mobileSection.style.display = 'none';
+
+    const method = methodSelect.value;
+    if (method === 'card') {
+      cardSection.style.display = 'block';
+    } else if (['mtn', 'airtel', 'mpesa'].includes(method)) {
+      mobileSection.style.display = 'block';
+    }
+  });
+
+  document.getElementById('payBtn').addEventListener('click', function (e) {
+    e.preventDefault();
+    msgBox.innerHTML = '';
+
+    const method = methodSelect.value;
+    if (!method) {
+      msgBox.innerHTML = `<div class="error">Select a payment method first!</div>`;
+      return;
+    }
+
+    msgBox.innerHTML = `<div class="success">Processing ${method.toUpperCase()} payment... (Simulated)</div>`;
+    // Replace with actual backend API call here
+  });
+</script>
+
+<script>
+    const ticketTypeSelect = document.getElementById('ticketType');
+    const quantityInput = document.getElementById('quantity');
+    const summaryType = document.getElementById('summaryType');
+    const summaryQty = document.getElementById('summaryQty');
+    const summaryUnit = document.getElementById('summaryUnit');
+    const summaryTotal = document.getElementById('summaryTotal');
+
+    function updateSummary() {
+      const selected = ticketTypeSelect.options[ticketTypeSelect.selectedIndex];
+      const price = parseFloat(selected.dataset.price);
+      const qty = parseInt(quantityInput.value) || 1;
+      const type = selected.value.toUpperCase();
+
+      summaryType.innerText = type;
+      summaryQty.innerText = qty;
+      summaryUnit.innerText = price.toFixed(2);
+      summaryTotal.innerText = (price * qty).toFixed(2);
+    }
+
+    // Attach listeners
+    ticketTypeSelect.addEventListener('change', updateSummary);
+    quantityInput.addEventListener('input', updateSummary);
+
+    // Initialize on load
+    updateSummary();
+  </script>
+
+
+  <%-include("../partials/footer") %>

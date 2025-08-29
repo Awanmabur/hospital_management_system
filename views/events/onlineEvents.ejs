@@ -1,0 +1,146 @@
+<%-include("../partials/header") %>
+
+<%-include("../partials/dropdown") %>
+
+<%-include("../partials/flash") %>
+
+<%-include("../events/slide") %>
+
+<div class="filter-section">
+  <div class="filter-title">🎯 Filter Events</div>
+  <div class="filter-grid">
+    <div class="filter-group">
+      <label for="category">Event Type</label>
+      <select id="category">
+        <option value="">All Categories</option>
+        <option>Concert</option>
+        <option>Wedding</option>
+        <option>Workshop</option>
+        <option>Conference</option>
+        <option>Festival</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="location">Location</label>
+      <input type="text" id="location" placeholder="City or venue">
+    </div>
+
+    <div class="filter-group">
+      <label for="start-date">Start Date</label>
+      <input type="date" id="start-date">
+    </div>
+
+    <div class="filter-group">
+      <label for="end-date">End Date</label>
+      <input type="date" id="end-date">
+    </div>
+
+    <div class="filter-group">
+      <label for="price">Price Range</label>
+      <select id="price">
+        <option value="">All Prices</option>
+        <option>Free</option>
+        <option>Under $10</option>
+        <option>$10 - $50</option>
+        <option>$50 - $100</option>
+        <option>$100+</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="filter-actions">
+    <button type="button">Apply Filters</button>
+  </div>
+
+  <div class="controller">
+    <div class="controller-item active" data-filter="all">All</div>
+    <div class="controller-item" data-filter="for-You">For You</div>
+    <div class="controller-item" data-filter="nearby">Nearby</div>
+    <div class="controller-item" data-filter="today">Today</div>
+    <div class="controller-item" data-filter="tomorrow">Tomorrow</div>
+    <div class="controller-item" data-filter="this-weekend">This Weekend</div>
+    <div class="controller-item" data-filter="online">Lives</div>
+    <div class="controller-item" data-filter="next-Week">Next Week</div>
+    <div class="controller-item" data-filter="this-Month">This Month</div>
+    <div class="controller-item" data-filter="next-Month">Next Month</div>
+  </div>
+
+</div>
+
+
+
+  <section class="section" data-tags="tomorrow, this-weekend, this-month, next-month, online, today">
+
+    <div class="section-header">
+      <h2>Online Events</h2>
+    </div>
+
+    <div class="events">
+      <% onlineEvents.forEach(event => { %>
+        <div class="card">
+          <img src="<%= event.image || 'https://via.placeholder.com/400x250' %>" alt="<%= event.title %>" />
+
+          <div class="button-row">
+            <!-- Profile image -->
+            <div class="profile-img">
+              <img src="https://via.placeholder.com/40" alt="Profile">
+            </div>
+
+            <!-- Stats: views, likes, shares -->
+            <div class="right-buttons">
+              <div class="stat">
+                <div class="stat-count">1.2k</div>
+                <i class="fa-solid fa-eye stat-icon"></i>
+              </div>
+
+              <div class="stat" onclick="toggleLike(this)">
+                <div class="stat-count" id="likeCount">345</div>
+                <i class="fa-regular fa-heart stat-icon heart"></i>
+              </div>
+
+              <div class="stat">
+                <div class="stat-count">89</div>
+                <i class="fa-solid fa-share stat-icon"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <h3><%= event.title?.slice(0, 55) %>....</h3>
+            <p>📅 <%= new Date(event.date).toDateString() %> | <i style="font-size: 14px; margin-left: 5px;" class="fa fa-map-marker" aria-hidden="true"></i> <%= event.location %></p>
+
+            <% if (event.is_free) { %>
+              <p>🎟️ Free</p>
+            <% } else {
+                const cheapest = event.ticket_types.reduce((min, ticket) => ticket.current_price < min ? ticket.current_price : min, event.ticket_types[0].current_price);
+                const totalSold = event.ticket_types.reduce((sum, ticket) => sum + ticket.sold, 0);
+                const totalAvailable = event.ticket_types.reduce((sum, ticket) => sum + ticket.total_available, 0);
+                const ticketsLeft = totalAvailable - totalSold;
+            %>
+              <p>💸 From $<%= cheapest %> | 🔥 Only <%= ticketsLeft %> left</p>
+            <% } %>
+
+            <div class="actionbtn">
+              <a class="bookingbtn" href="/book/event/<%= event._id %>">Book ticket</a>
+              <a class="detailsbtn" href="/show/<%= event.type %>/<%= event._id %>">View details</a>
+            </div>
+          </div>
+        </div>
+      <% }); %>
+    </div>
+  </section>
+
+
+
+
+
+<!-- to top button start-->
+
+<button id="toTopBtn">↑</button>
+
+<!-- to top button end-->
+
+
+
+<%-include("../partials/footer") %>

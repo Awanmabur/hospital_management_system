@@ -1,0 +1,202 @@
+
+    <div class="checkin-container">
+        <!-- Manual Search Column -->
+        <div class="checkin-column">
+
+            <h4>Ticket Code Check-In</h4>
+            <form class="booking-group" id="booking-form" autocomplete="off">
+                <input type="text" id="booking-input" placeholder="Enter ticket code here..." required>
+                <button type="submit">Get Ticket</button>
+            </form>
+            <div class="booking-result" id="booking-result"></div>
+        </div>
+        <!-- QR Code checkin-column -->
+        <div class="checkin-column">
+            <h4>QR Code Check-In</h4>
+            <div class="qr-section">
+                <video id="qr-video" playsinline></video>
+                <div class="qr-btns">
+                    <button id="start-scan-btn">Scan QR code</button>
+                    <button id="stop-scan-btn" disabled>Stop</button>
+                </div>
+                <div class="booking-result" id="qr-result"></div>
+            </div>
+        </div>
+    </div>
+    <!-- QR Scanner Library (minimal, using jsQR via CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+    <script>
+    // --- Booking Reference Logic (Node.js backend) ---
+    const API_BASE = "http://localhost:3000/api";
+
+    async function fetchBooking(bookingRef) {
+        const res = await fetch(`${API_BASE}/booking/${encodeURIComponent(bookingRef)}`);
+        if (!res.ok) {
+            const data = await res.json();
+            throw (data.error || "Booking not found.");
+        }
+        return await res.json();
+    }
+
+    async function useTicket(bookingRef) {
+        const res = await fetch(`${API_BASE}/booking/${encodeURIComponent(bookingRef)}/use`, {
+            method: "POST"
+        });
+        if (!res.ok) {
+            const data = await res.json();
+            throw (data.error || "Failed to mark ticket as used.");
+        }
+        return (await res.json()).message;
+    }
+
+    const bookingForm = document.getElementById('booking-form');
+    const bookingInput = document.getElementById('booking-input');
+    const bookingResult = document.getElementById('booking-result');
+
+    bookingForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const ref = bookingInput.value.trim().toUpperCase();
+        bookingResult.innerHTML = "Loading booking...";
+        try {
+            const booking = await fetchBooking(ref);
+            bookingResult.innerHTML = `
+                <div class="booking-details">
+                    <strong>Event Title:</strong> ${booking.item_details && booking.item_details.title ? booking.item_details.title.slice(0, 25) : 'Unknown'}...<br>
+                    <strong>Name:</strong> ${booking.full_name || booking.name || ''}<br>
+                    <strong>Telephone:</strong> ${booking.phone || ''}<br>
+                    <strong>Ticket_type:</strong> ${booking.ticket_types || ''}<br>
+                    <strong>Quantity:</strong> ${booking.quantity || ''}<br>
+                    <strong>Amount:</strong> ${booking.total_paid || ''}<br>
+                    <strong>Book On:</strong> ${booking.createdAt ? new Date(booking.createdAt).toDateString() : ''}<br>
+                    <strong>Booking Ref:</strong> ${booking.booking_reference}<br>
+                    ${booking.used_at ? `<strong>Used On:</strong> ${new Date(booking.used_at).toDateString()}<br>` : ''}
+                    <strong>Status:</strong> <span id="ticket-status" style="color:${booking.ticket_status === 'used' ? '#e74c3c' : '#27ae60'};font-weight:600">${booking.ticket_status ? booking.ticket_status.toUpperCase() : ''}</span>
+                </div>
+                <button class="use-ticket-btn" id="use-ticket-btn" ${booking.ticket_status === 'used' ? 'disabled' : ''}>Mark Ticket as Used</button>
+                <div id="use-ticket-msg" style="margin-top:8px;"></div>
+            `;
+
+            if (booking.ticket_status !== 'used') {
+                document.getElementById('use-ticket-btn').onclick = async function() {
+                    this.disabled = true;
+                    document.getElementById('use-ticket-msg').textContent = "Processing...";
+                    try {
+                        const msg = await useTicket(booking.booking_reference);
+                        document.getElementById('ticket-status').textContent = "USED";
+                        document.getElementById('ticket-status').style.color = "#e74c3c";
+                        document.getElementById('use-ticket-msg').textContent = msg;
+                        document.getElementById('use-ticket-msg').style.color = "#27ae60";
+                    } catch (err) {
+                        document.getElementById('use-ticket-msg').textContent = err;
+                        document.getElementById('use-ticket-msg').style.color = "#e74c3c";
+                    }
+                }
+            }
+        } catch (err) {
+            bookingResult.innerHTML = `<span style="color:#e74c3c">${err}</span>`;
+        }
+    });
+
+    // --- QR Code Scanning Logic ---
+    const video = document.getElementById('qr-video');
+    const startBtn = document.getElementById('start-scan-btn');
+    const stopBtn = document.getElementById('stop-scan-btn');
+    const qrResult = document.getElementById('qr-result');
+    let scanning = false;
+    let videoStream = null;
+    let scanInterval = null;
+
+    startBtn.addEventListener('click', async function() {
+        qrResult.textContent = "";
+        startBtn.disabled = true;
+        stopBtn.disabled = false;
+        video.style.display = "block";
+        try {
+            videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+            video.srcObject = videoStream;
+            video.setAttribute("playsinline", true);
+            await video.play();
+            scanning = true;
+            scanInterval = setInterval(scanQRCode, 350);
+        } catch (err) {
+            qrResult.textContent = "Camera access denied or not available.";
+            qrResult.style.color = "#e74c3c";
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+            video.style.display = "none";
+        }
+    });
+
+    stopBtn.addEventListener('click', stopScanning);
+
+    function stopScanning() {
+        scanning = false;
+        startBtn.disabled = false;
+        stopBtn.disabled = true;
+        video.style.display = "none";
+        if (scanInterval) clearInterval(scanInterval);
+        if (videoStream) {
+            videoStream.getTracks().forEach(track => track.stop());
+            videoStream = null;
+        }
+    }
+
+    async function scanQRCode() {
+        if (!video || video.readyState !== video.HAVE_ENOUGH_DATA) return;
+        const canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const code = jsQR(imageData.data, canvas.width, canvas.height);
+        if (code) {
+            // Try to treat QR code as booking reference
+            const ref = code.data.trim().toUpperCase();
+            qrResult.innerHTML = "Fetching booking for QR: <b>" + ref + "</b> ...";
+            stopScanning();
+            try {
+                const booking = await fetchBooking(ref);
+                qrResult.innerHTML = `
+                    <div class="booking-details">
+                        <strong>Event Title:</strong> ${booking.item_details && booking.item_details.title ? booking.item_details.title.slice(0, 25) : 'Unknown'}...<br>
+                        <strong>Name:</strong> ${booking.full_name || booking.name || ''}<br>
+                        <strong>Telephone:</strong> ${booking.phone || ''}<br>
+                        <strong>Ticket_type:</strong> ${booking.ticket_types || ''}<br>
+                        <strong>Quantity:</strong> ${booking.quantity || ''}<br>
+                        <strong>Amount:</strong> ${booking.total_paid || ''}<br>
+                        <strong>Book On:</strong> ${booking.createdAt ? new Date(booking.createdAt).toDateString() : ''}<br>
+                        <strong>Booking Ref:</strong> ${booking.booking_reference}<br>
+                        ${booking.used_at ? `<strong>Used On:</strong> ${new Date(booking.used_at).toDateString()}<br>` : ''}
+                        <strong>Status:</strong> <span id="qr-ticket-status" style="color:${booking.ticket_status === 'used' ? '#e74c3c' : '#27ae60'};font-weight:600">${booking.ticket_status ? booking.ticket_status.toUpperCase() : ''}</span>
+                    </div>
+                    <button class="use-ticket-btn" id="qr-use-ticket-btn" ${booking.ticket_status === 'used' ? 'disabled' : ''}>Mark Ticket as Used</button>
+                    <div id="qr-use-ticket-msg" style="margin-top:8px;"></div>
+                `;
+
+                if (booking.ticket_status !== 'used') {
+                    document.getElementById('qr-use-ticket-btn').onclick = async function() {
+                        this.disabled = true;
+                        document.getElementById('qr-use-ticket-msg').textContent = "Processing...";
+                        try {
+                            const msg = await useTicket(booking.booking_reference);
+                            document.getElementById('qr-ticket-status').textContent = "USED";
+                            document.getElementById('qr-ticket-status').style.color = "#e74c3c";
+                            document.getElementById('qr-use-ticket-msg').textContent = msg;
+                            document.getElementById('qr-use-ticket-msg').style.color = "#27ae60";
+                        } catch (err) {
+                            document.getElementById('qr-use-ticket-msg').textContent = err;
+                            document.getElementById('qr-use-ticket-msg').style.color = "#e74c3c";
+                        }
+                    }
+                }
+            } catch (err) {
+                qrResult.innerHTML = `<span style="color:#e74c3c">${err}</span>`;
+            }
+        }
+    }
+
+
+
+    </script>
+ 

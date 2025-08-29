@@ -1,0 +1,8 @@
+
+<form action="/borrow-request" method="POST">
+  <input type="hidden" name="book_id" value="<%= book.BOOK_ID %>">
+  <label>Days:
+    <input type="number" name="days_requested" required>
+  </label>
+  <button type="submit">Request Book</button>
+</form>

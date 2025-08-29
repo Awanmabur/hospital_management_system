@@ -1,0 +1,99 @@
+   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+    <h2>Finance Overview</h2>
+
+    <div class="summary-cards">
+      <div class="finance-card">
+        <p>$<%= totalPromoterRevenue.toLocaleString() %></p>
+        <h3>Total Revenue</h3>
+      </div>
+      <div class="finance-card">
+        <p>$<%= promoterTableRevenue.toLocaleString() %></p>
+        <h3>Table Revenue</h3>
+      </div>
+      <div class="finance-card">
+        <p>$<%= promoterVipRevenue.toLocaleString() %></p>
+        <h3>VIP Ticket Revenue</h3>
+      </div>
+      <div class="finance-card">
+        <p>$<%= promoterOrdinaryRevenue.toLocaleString() %></p>
+        <h3>Ordinary Ticket Revenue</h3>
+      </div>
+    </div>
+
+
+
+    <div class="chart-section">
+      <canvas id="revenueChart"></canvas>
+    </div>
+
+
+     <h2>Ticket Details</h2>
+
+     <div class="table-wrapper">
+       <table>
+          <thead>
+            <tr>
+              <th>Booking ID</th>
+              <th>Type</th>
+              <th>Ticket Type</th>
+              <th>Quantity</th>
+              <th>Total Paid</th>
+              <th>Status</th>
+              <th>Issued On</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% bookings.forEach(booking => { %>
+              <tr>
+                <td><%= booking.booking_reference.slice(5, 12) %></td>
+                <td><%= booking.for_type %></td>
+                <td><%= booking.ticket_types %></td>
+                <td><%= booking.quantity %></td>
+                <td>$<%= booking.total_paid %></td>
+                <td><%= booking.status %></td>
+                <td><%= booking.createdAt.toISOString().substring(0,10) %></td>
+                <td> <a class="view-btn" href="/myticket/<%= booking._id %>">view</a> </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+     </div>
+
+
+
+    <script>
+      const ctx = document.getElementById('revenueChart').getContext('2d');
+
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: <%- chartLabels %>,
+          datasets: [{
+            label: 'Revenue',
+            data: <%- revenueData %>,
+            fill: true,
+            backgroundColor: 'rgba(59, 130, 246, 0.2)',
+            borderColor: '#3b82f6',
+            tension: 0.3,
+            pointBackgroundColor: '#3b82f6'
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'top' }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: { display: true, text: 'Net Revenue ($)' }
+            }
+          }
+        }
+      });
+    </script>
+
+ 

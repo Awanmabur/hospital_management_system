@@ -1,0 +1,20 @@
+<% cars.forEach(service => { %>
+  <% if (service.category === 'car') { %>
+
+    <div class="services-card" >
+      <img src="<%= service.images %>" alt="">
+      <h3><%= service.name %></h3>
+      <p><%= service.description?.slice(0, 100) %>.... %></p>
+      <div class="rating">
+        <%= '⭐'.repeat(service.rating) %><%= service.rating < 5 ? '☆' : '' %>
+      </div>
+      <a href="/showService/<%= service._id %>">
+        <%= service.name && (service.name.includes('Book') || service.name.includes('Reserve') || service.name.includes('Hire'))
+        ? service.name.split(' ')[0] + ' Now'
+        : 'View Details' %>
+
+      </a>
+    </div>
+  <% } %>
+
+<% }); %>

@@ -1,0 +1,82 @@
+<!-- views/editEvent.ejs -->
+<%-include("../partials/header") %>
+
+<%-include("../partials/dropdown") %>
+
+<%-include("../partials/flash") %>
+
+
+<% if (blog.image) { %>
+  <div style="background-image: url('<%= blog.image %>');" class="hero">
+
+  </div>
+<% } %>
+
+<form action="/updateBlog/<%= blog._id %>" method="POST" enctype="multipart/form-data">
+
+<div class="event-edit-form-wrapper">
+
+  <div class="event-edit-section">
+    <h3>Event Details</h3>
+
+        <label class="event-edit-label" for="blogImage">Cover Image</label>
+        <input class="event-edit-input" type="file" id="blogImage" name="image" accept="image/*" onchange="previewImage(event)" />
+
+
+      <!-- Image preview container -->
+      <div id="imagePreviewContainer" style="margin-top: 10px;">
+        <img
+          id="imagePreview"
+          src="<%= blog.image ? blog.image.url : '' %>"
+          alt="Image Preview"
+          style="width: 100%; border: 1px solid #ccc; padding: 5px; <%= blog.image ? '' : 'display:none;' %>"
+        />
+      </div>
+
+      <script>
+        function previewImage(event) {
+          const file = event.target.files[0];
+          const preview = document.getElementById('imagePreview');
+
+          if (file) {
+            preview.src = URL.createObjectURL(file);
+            preview.style.display = 'block';
+          } else {
+            preview.src = '';
+            preview.style.display = 'none';
+          }
+        }
+      </script>
+  </div>
+
+  <!-- Event Section -->
+  <div class="event-edit-section">
+    <h3>Ticket Information</h3>
+
+    <label class="event-edit-label" for="blogTitle">Blog Title</label>
+    <input class="event-edit-input" type="text" name="title" placeholder="Enter blog title" value="<%= blog.title %>" />
+
+    <label for="category">Blog Category</label>
+    <select id="category" name="category" class="event-edit-select" required>
+      <option value="">Select Category</option>
+      <option value="music" <%= blog.category === 'music' ? 'selected' : '' %>>Music</option>
+      <option value="fashion" <%= blog.category === 'fashion' ? 'selected' : '' %>>Fashion</option>
+      <option value="sports" <%= blog.category === 'sports' ? 'selected' : '' %>>Sports</option>
+      <option value="business" <%= blog.category === 'business' ? 'selected' : '' %>>Business</option>
+      <option value="education" <%= blog.category === 'education' ? 'selected' : '' %>>Education</option>
+      <option value="religion" <%= blog.category === 'religion' ? 'selected' : '' %>>Religion</option>
+      <option value="others" <%= blog.category === 'others' ? 'selected' : '' %>>Others</option>
+    </select>
+
+    <label class="event-edit-label" for="eventDescription">Description</label>
+    <textarea class="event-edit-textarea" rows="6" name="content" placeholder="Describe the blog..."><%= blog.content %></textarea>
+
+    <button class="event-edit-submit-btn" type="submit">Update Blog</button>
+
+  </div>
+
+</div>
+
+</form>
+
+<%-include("../partials/footer") %>

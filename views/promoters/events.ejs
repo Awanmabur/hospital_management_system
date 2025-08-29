@@ -1,0 +1,27 @@
+
+<h1>Event Management</h1>
+<p style="text-align: center; margin-bottom: 20px">Create, edit, or delete events. Set categories and visibility.</p>
+
+
+<section>
+
+  <div class="events-overview">
+    <% events.forEach(event => { %>
+      <article class="event-card" tabindex="0">
+        <img
+          class="event-image"
+          src="<%= event.image %>"
+          alt="<%= event.title %>"
+        />
+        <div class="event-details">
+          <h3 class="event-title"><%= event.title?.slice(0,20) %>...</h3>
+          <p class="event-info">📅 <%= new Date(event.date).toDateString() %> | <i style="font-size: 14px; margin-left: 5px;" class="fa fa-map-marker" aria-hidden="true"></i> <%= event.location %></p>
+        </div>
+        <div class="event-actions">
+          <a class="view-btn" href="/edit/<%= event._id %>">Edit</a>
+          <a class="view-btn" href="/show/<%= event.type %>/<%= event._id %>">View</a>
+        </div>
+      </article>
+    <% }) %>
+  </div>
+</section>

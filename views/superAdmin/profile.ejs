@@ -1,0 +1,47 @@
+
+<div class="profile-container">
+  <div class="profile-header">
+    <a href="/editUserInfo/<%= user._id %>"><button>edit</button></a>
+    <img class="profile-avatar" src="<%= user.profile_image || 'https://via.placeholder.com/120' %>" alt="<%= user.username %>">
+    <div class="profile-info">
+      <a href="/editUserInfo/<%= user._id %>"><button>edit</button>clean</a>
+      <h2><%= user.username %> <span class="verified">✔️</span></h2>
+      <p class="bio"><%= user.bio?.slice(0,250) || 'Event enthusiast and regular attendee.' %>...</p>
+      <div class="profile-stats">
+        <div><span class="stat"><%= totalEvents %></span> Events</div>
+        <div><span class="stat"><%= user.followers %></span> Followers</div>
+        <div><span class="stat"><%= user.reviews || '4.5' %></span> ★ Rating</div>
+      </div>
+      <div class="social-links">
+        <% if (user.facebook) { %><a href="<%= user.facebook %>" target="_blank"><i class="fab fa-facebook"></i></a><% } %>
+        <% if (user.instagram) { %><a href="<%= user.instagram %>" target="_blank"><i class="fab fa-instagram"></i></a><% } %>
+        <% if (user.website) { %><a href="<%= user.website %>" target="_blank"><i class="fas fa-globe"></i></a><% } %>
+      </div>
+
+    </div>
+  </div>
+
+<% if (events.length > 0) { %>
+  <div class="profile-section">
+    <h3>Active Events</h3>
+    <div class="profile-grid">
+     <% events.forEach(event => { %>
+      <div class="profile-card">
+        <img src="<%= event.image || 'https://via.placeholder.com/300x180' %>" alt="Event Image" />
+        <div class="details">
+          <h4><%= event.title?.slice(0,25) %>...</h4>
+          <p><%= event.description?.slice(0,50) %>...</p>
+          <p><%= new Date(event.date).toDateString() %> | <%= event.location %></p>
+          <a class="view-btn" href="/edit/<%= event._id %>">Edit</a>
+          <a class="view-btn" href="/show/<%= event.type %>/<%= event._id %>">View</a>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+
+<% } else { %>
+  <p>No events posted yet.</p>
+<% } %>
+
+</div>

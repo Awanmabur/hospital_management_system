@@ -1,0 +1,53 @@
+<%-include("../partials/header") %>
+
+<%-include("../partials/dropdown") %>
+
+<%-include("../partials/flash") %>
+
+
+<div class="profile-page-wrapper">
+  <div class="profile-header-box">
+    <img class="profile-header-img" src="<%= user.profile_image || 'https://via.placeholder.com/120' %>" alt="<%= user.username %>">
+    <div class="profile-main-info">
+      <h2><%= user.username %> <span class="profile-verified-badge">✔️</span></h2>
+      <p class="profile-bio-text"><%= user.bio?.slice(0,250) || 'Event enthusiast and regular attendee.' %>...</p>
+      <div class="profile-stats-box">
+        <div><span class="profile-stat-value"><%= totalEvents %></span> Events</div>
+        <div><span class="profile-stat-value"><%= user.followers %></span> Followers</div>
+        <div><span class="profile-stat-value"><%= user.reviews || '4.5' %></span> ★ Rating</div>
+      </div>
+      <div class="profile-social-links">
+        <% if (user.facebook) { %><a href="<%= user.facebook %>" target="_blank"><i class="fab fa-facebook"></i></a><% } %>
+        <% if (user.instagram) { %><a href="<%= user.instagram %>" target="_blank"><i class="fab fa-instagram"></i></a><% } %>
+        <% if (user.website) { %><a href="<%= user.website %>" target="_blank"><i class="fas fa-globe"></i></a><% } %>
+      </div>
+    </div>
+  </div>
+
+  <% if (events.length > 0) { %>
+    <div class="profile-events-section">
+      <h3>Active Events</h3>
+      <div class="profile-events-grid">
+        <% events.forEach(event => { %>
+          <div class="profile-event-card">
+            <img src="<%= event.image || 'https://via.placeholder.com/300x180' %>" alt="Event Image" />
+            <div class="profile-event-details">
+              <h4> <strong><%= event.title?.slice(0,25) %>...</strong> </h4>
+              <p><%= event.description?.slice(0,50) %>...</p>
+              <p><%= new Date(event.date).toDateString() %> | <%= event.location %></p>
+              <div class="actionbtn">
+                <a class="bookingbtn" href="/book/event/<%= event._id %>">Book ticket</a>
+                <a class="detailsbtn" href="/show/<%= event.type %>/<%= event._id %>">View details</a>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  <% } else { %>
+    <p>No events posted yet.</p>
+  <% } %>
+</div>
+
+
+<%-include("../partials/footer") %>

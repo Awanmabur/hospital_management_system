@@ -1,0 +1,185 @@
+
+
+<div class="analytic-ontainer">
+
+    <h2>Analytics Dashboard</h2>
+
+    <div class="analytic-stats">
+      <div class="analytic-card">
+        <p>1,204</p>
+        <h3>Users</h3>
+      </div>
+      <div class="analytic-card">
+        <p>248</p>
+        <h3>Events</h3>
+      </div>
+      <div class="analytic-card">
+        <p>4,352</p>
+        <h3>Tickets Sold</h3>
+      </div>
+      <div class="analytic-card">
+        <p>$12,740</p>
+        <h3>Revenue</h3>
+      </div>
+    </div>
+
+    <div class="charts">
+      <div>
+        <canvas id="ticketSalesChart"></canvas>
+      </div>
+      <div>
+        <canvas id="usersGrowthChart"></canvas>
+      </div>
+    </div>
+
+    <div class="charts-3">
+      <div>
+        <canvas id="ticketSourceChart"></canvas>
+      </div>
+      <div>
+        <canvas id="usersRolesChart"></canvas>
+      </div>
+    </div>
+
+
+    <div class="lastCharts">
+       <canvas id="eventsGrowthChart"></canvas>
+    </div>
+
+
+      <h3>User Details</h3>
+      <div class="table-wrapper">
+        <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Jane Doe</td>
+            <td>jane@example.com</td>
+            <td>Admin</td>
+          </tr>
+          <tr>
+            <td>John Smith</td>
+            <td>john@example.com</td>
+            <td>Organizer</td>
+          </tr>
+          <tr>
+            <td>Emily Johnson</td>
+            <td>emily@example.com</td>
+            <td>Attendee</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+ </div>
+
+  <script>
+    new Chart(document.getElementById('ticketSalesChart').getContext('2d'), {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        datasets: [{
+          label: 'Ticket Sales',
+          data: [500, 800, 600, 1200, 1500, 1800],
+          borderColor: '#3b82f6',
+          backgroundColor: 'rgba(59, 130, 246, 0.2)',
+          borderWidth: 2,
+          tension: 0.3,
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+        }
+      }
+    });
+
+    new Chart(document.getElementById('ticketSourceChart').getContext('2d'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Online', 'Offline', 'At the Door'],
+        datasets: [{
+          label: 'Ticket Source',
+          data: [50, 25, 15],
+          backgroundColor: ['#3b82f6', '#10b981', '#f59e0b'],
+          hoverOffset: 10
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom',
+          }
+        }
+      }
+    });
+
+    new Chart(document.getElementById('usersGrowthChart').getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        datasets: [{
+          label: 'New Users',
+          data: [100, 120, 180, 140, 220, 300],
+          backgroundColor: '#4f46e5'
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: false
+          }
+        }
+      }
+    });
+
+    new Chart(document.getElementById('eventsGrowthChart').getContext('2d'), {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        datasets: [{
+          label: 'Events Created',
+          data: [10, 15, 8, 12, 18, 22],
+          borderColor: '#ec4899',
+          backgroundColor: 'rgba(236, 72, 153, 0.2)',
+          tension: 0.4,
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true
+      }
+    });
+
+    new Chart(document.getElementById('usersRolesChart').getContext('2d'), {
+      type: 'pie',
+      data: {
+        labels: ['Admin', 'Organizer', 'Attendee'],
+        datasets: [{
+          label: 'User Roles',
+          data: [10, 30, 60],
+          backgroundColor: ['#9333ea', '#f43f5e', '#14b8a6']
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }
+    });
+  </script>
