@@ -121,17 +121,17 @@ exports.login = async (req, res, next) => {
       req.flash('welcome', `Welcome back ${user.username}`);
 
       if (user.role === "super-admin") {
-        res.redirect(`/adminDashboard/${user._id}`);
-      } else if (user.role === "user") {
-        res.redirect(`/userDashboard/${user._id}`);
-      } else if (user.role === "vendor") {
-        res.redirect(`/vendorDashboard/${user._id}`);
-      } else if (user.role === "organizer") {
-        res.redirect(`/organiserDashboard/${user._id}`);
-      } else if (user.role === "promoter") {
-        res.redirect(`/promoterDashboard/${user._id}`);
+        res.redirect(`/dashboard/admin/${user._id}`);
+      } else if (user.role === "nurse") {
+        res.redirect(`/dashboard/nurse/${user._id}`);
+      } else if (user.role === "doctor") {
+        res.redirect(`/dashboard/doctor/${user._id}`);
+      } else if (user.role === "accountant") {
+        res.redirect(`/dashboard/accountant/${user._id}`);
+      } else if (user.role === "pharmacist") {
+        res.redirect(`/dashboard/pharmacist/${user._id}`);
       } else {
-        res.redirect('/defaultPage'); // fallback if role is unknown
+        res.redirect('/dashboard/patient'); // fallback if role is unknown
       }
 
   }

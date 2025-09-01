@@ -134,7 +134,7 @@ app.locals.isProfileOwner = function(loggedInUserId, profileUserId) {
 // ***********************************Routes ********************************//
 app.use(require("./routes/index"))
 app.use(require("./routes/users"))
-// app.use(require("./routes/event"))
+app.use(require("./routes/patient"))
 // app.use(require("./routes/blog"))
 // app.use(require("./routes/service"))
 // app.use(require("./routes/attendee"))

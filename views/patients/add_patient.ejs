@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patient Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    form {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 600px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+      color: #444;
+    }
+
+    input, select, textarea, button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border 0.3s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #007bff;
+      outline: none;
+    }
+
+    textarea {
+      resize: none;
+    }
+
+    button {
+      background: #007bff;
+      color: white;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .add-btn {
+      width: auto;
+      background: #28a745;
+      margin-bottom: 15px;
+    }
+
+    .add-btn:hover {
+      background: #1e7e34;
+    }
+
+    .allergy-item {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <form action="/add_patient" method="POST" enctype="multipart/form-data">
+    <h2>Patient Registration</h2>
+
+    <!-- User -->
+     
+
+    <!-- Date of Birth -->
+    <label for="dob">Date of Birth</label>
+    <input type="date" id="dob" name="date_of_birth">
+
+    <!-- Gender -->
+    <label for="gender">Gender</label>
+    <select id="gender" name="gender">
+      <option value="">Select gender</option>
+      <option value="male">Male</option>
+      <option value="female">Female</option>
+      <option value="other">Other</option>
+    </select>
+
+    <!-- Address -->
+    <label for="address">Address</label>
+    <input type="text" id="address" name="address" placeholder="Enter address">
+
+    <!-- Profile Image -->
+    <label for="profile_image">Profile Image</label>
+    <input type="file" id="profile_image" name="profile_image" accept="image/*">
+
+    <!-- Emergency Contact -->
+    <label for="emergency_contact">Emergency Contact</label>
+    <input type="text" id="emergency_contact" name="emergency_contact" placeholder="Enter emergency contact">
+
+    <!-- Blood Group -->
+    <label for="blood_group">Blood Group</label>
+    <input type="text" id="blood_group" name="blood_group" placeholder="e.g. A+, O-">
+
+    <!-- Allergies -->
+    <label for="allergies">Allergies</label>
+    <div id="allergy-list">
+      <input type="text" name="allergies[]" placeholder="Enter an allergy" class="allergy-item">
+    </div>
+    <button type="button" class="add-btn" onclick="addAllergy()">+ Add More</button>
+
+    <!-- Medical History -->
+    <label for="medical_history">Medical History</label>
+    <textarea id="medical_history" name="medical_history" rows="4" placeholder="Enter medical history"></textarea>
+
+    <!-- Insurance -->
+    <label for="insurance">Insurance Policy</label>
+    <select id="insurance" name="insurance">
+      <option value="">Select insurance policy</option>
+      <!-- Populate dynamically -->
+    </select>
+
+    <!-- Submit -->
+    <button type="submit">Save Patient</button>
+  </form>
+
+  <script>
+    function addAllergy() {
+      const div = document.createElement("div");
+      div.innerHTML = '<input type="text" name="allergies[]" placeholder="Enter an allergy" class="allergy-item">';
+      document.getElementById("allergy-list").appendChild(div);
+    }
+  </script>
+</body>
+</html>
