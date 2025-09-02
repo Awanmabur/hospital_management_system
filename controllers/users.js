@@ -121,17 +121,17 @@ exports.login = async (req, res, next) => {
       req.flash('welcome', `Welcome back ${user.username}`);
 
       if (user.role === "super-admin") {
-        res.redirect(`/dashboard/admin/${user._id}`);
+        res.redirect(`/admin/${user._id}`);
       } else if (user.role === "nurse") {
-        res.redirect(`/dashboard/nurse/${user._id}`);
+        res.redirect(`/nurse/${user._id}`);
       } else if (user.role === "doctor") {
-        res.redirect(`/dashboard/doctor/${user._id}`);
+        res.redirect(`/doctor/${user._id}`);
       } else if (user.role === "accountant") {
-        res.redirect(`/dashboard/accountant/${user._id}`);
+        res.redirect(`/accountant/${user._id}`);
       } else if (user.role === "pharmacist") {
-        res.redirect(`/dashboard/pharmacist/${user._id}`);
+        res.redirect(`/pharmacist/${user._id}`);
       } else {
-        res.redirect('/dashboard/patient'); // fallback if role is unknown
+        res.redirect('/patient'); // fallback if role is unknown
       }
 
   }

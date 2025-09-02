@@ -64,7 +64,7 @@ exports.isUser = (req, res, next) => {
     }
 
     // Check for user role
-    if (!['user', 'vendor', 'promoter', 'organizer'].includes(decodedToken.role)) {
+    if (!['doctor', 'pharmacist', 'nurse', 'accountant'].includes(decodedToken.role)) {
       req.flash('warning', 'Dear user, please do the right thing, or you will be suspended.');
       return res.redirect('/login');
     }

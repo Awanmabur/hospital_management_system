@@ -5,47 +5,11 @@ const cloudinary = require('cloudinary').v2;
 const jwt = require('jsonwebtoken');
 const moment = require('moment');
 
-const Event = require('../models/Event');
-const Service = require('../models/Service');
-const Promotion = require('../models/Promotion');
-
 const Blog = require('../models/Blog');
 const User = require('../models/User');
 const {user} = require("../middlewares/auth");
 
-const Subscriber = require('../models/subscribers');
-
-const { Resend } = require('resend');
-const resend = new Resend('re_JeMhtFvt_15jBBPBSJNby79fWCdrmFZxv');
-
-
 // ***index route***
-exports.index = async (req, res, next) => {
-  try {
-      const userId = req.user;
-      const isUserLogin = await User.findById(userId);
-      const user = await User.findById(userId);
-      const blogs = await Blog.find({});
-      const events = await Event.find({});
-
-      const promotions = await Promotion.find({
-        type: { $in: ['service', 'event'] },
-        status: 'active',
-        startDate: { $lte: new Date() },
-        endDate: { $gte: new Date() }
-      });
-
-      const eventIds = promotions.map(p => p.itemId);
-      const promotedServices = await Service.find({ _id: { $in: eventIds } });
-      const eventsPromoted = await Event.find({ _id: { $in: eventIds } });
-      const promotedEvents = [...promotedServices, ...eventsPromoted];
-
-      res.render('./Blogs/index', { blogs, events, user, promotedEvents, isUserLogin });
-  } catch (error) {
-    req.flash('error', 'There is problem getting about you, please try again.');
-    return res.redirect('/');
-  }
-};
 
 
 // ***create report route***
@@ -102,30 +66,10 @@ exports.store = async (req, res, next) => {
     // Get user and account details
     const user = await User.findById(userId);
 
-    const subscribers = await Subscriber.find({});
-    const emails = subscribers.map(subscriber => subscriber.email);
-
-    async function sendEmail(emails, title, content, image) {
-      try {
-        const data = await resend.emails.send({
-          from: 'awanmabur212@gmail.com',
-          to: emails,
-          subject: title,
-          html: content,
-          file: image
-        });
-        console.log('Email sent:', data);
-      } catch (error) {
-        console.error('Resend error:', error);
-      }
-    }
-
      const blog = new Blog({ user:userId, publisher:userId, image, title, content });
 
      await blog.save();
-
-     console.log(blog);
-
+ 
      req.flash('success', 'You have successfully created your blog post.');
      res.redirect('/amokprofile');
 
