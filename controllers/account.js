@@ -31,7 +31,7 @@ exports.doctor = async (req, res) => {
       .sort({ date: 1 });
 
     // fetch patients linked to this doctor
-    const patients = await Patient.find({ doctor: userId });
+    const patients = await Patient.find({ user: userId });
 
     res.render('dashboard/doctor', {
       doctor,

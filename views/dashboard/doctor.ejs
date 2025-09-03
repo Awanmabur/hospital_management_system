@@ -86,7 +86,7 @@
       </div>
       <button class="logout-btn">
         <ion-icon name="log-out-outline" class="icon"></ion-icon>
-        <span>Logout</span>
+        <span> <a href="/Logout">Logout</a> </span>
       </button>
     </div>
   </aside>
@@ -255,16 +255,17 @@
         <div class="patients-container">
           <div class="patients-header">
             <h2 class="patients-subtitle">Patient List</h2>
-            <a href="create_patient">Add New Patient</a>
+            <a href="/create_patient">Add New Patient</a>
             <!-- <button id="addPatientBtn" class="patients-add-btn">
               <ion-icon name="add-outline" class="patients-icon"></ion-icon> Add New Patient
             </button> -->
           </div>
           <div class="patients-table-wrapper">
-            <table id="patientTable" class="patients-table display responsive nowrap">
+
+            <table class="patients-table display responsive nowrap">
               <thead>
                 <tr>
-                  <th>Patient ID</th>
+
                   <th>Name</th>
                   <th>Age</th>
                   <th>Gender</th>
@@ -274,9 +275,38 @@
                 </tr>
               </thead>
               <tbody>
-                <!-- Dynamic rows go here -->
+                <% if (patients && patients.length > 0) { %>
+                  <% patients.forEach(patient => { %>
+                    <tr>
+
+                      <td><%= patient.patient_name %></td>
+                      <td><%= patient.date_of_birth.toDateString() %></td>
+                      <td><%= patient.gender %></td>
+                      <td>
+                        <%= patient.lastVisit ? patient.lastVisit.toDateString() : "No visits yet" %>
+                      </td>
+                      <td>
+                        <%= patient.doctor ? patient.doctor.name : "Unassigned" %>
+                      </td>
+                      <td>
+                        <a href="/patient/<%= patient._id %>" class="btn btn-info btn-sm">View</a>
+                        <a href="/patients/<%= patient._id %>/edit" class="btn btn-warning btn-sm">Edit</a>
+                        <form action="/patients/<%= patient._id %>?_method=DELETE" method="POST" style="display:inline;">
+                          <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Delete this patient?')">
+                            Delete
+                          </button>
+                        </form>
+                      </td>
+                    </tr>
+                  <% }) %>
+                <% } else { %>
+                  <tr>
+                    <td colspan="7" class="text-center">No patients found.</td>
+                  </tr>
+                <% } %>
               </tbody>
             </table>
+
           </div>
         </div>
       </section>

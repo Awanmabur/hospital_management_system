@@ -1,16 +1,18 @@
 // controllers/patientController.js
 const jwt = require("jsonwebtoken");
 const sharp = require("sharp");
-// const cloudinary = require("../config/cloudinary");
+const cloudinary = require('cloudinary').v2;
+
 const Patient = require("../models/Patient");
 const User = require("../models/User");
+
 
 
 exports.create = async (req, res, next) => {
   try {
     // const userId = req.user;
     // const user = await User.findById(userId);
-    res.render('./patients/add_patient');
+    res.render('patients/add_patient');
   } catch (error) {
     req.flash('error', 'There is problem getting your blogs, please try again.');
     return res.redirect('/');
@@ -37,6 +39,7 @@ exports.store = async (req, res) => {
     }
 
     const {
+      patient_name,
       date_of_birth,
       gender,
       address,
@@ -46,18 +49,18 @@ exports.store = async (req, res) => {
       medical_history
     } = req.body;
 
-    let profileImageUrl = null;
+    let imageUrl = null;
 
-    // 🖼 Profile image upload to Cloudinary
+    // Image upload to Cloudinary
     if (req.file) {
       const buffer = await sharp(req.file.buffer)
-        .resize(600)
+        .resize(800)
         .jpeg({ quality: 80 })
         .toBuffer();
 
       const result = await new Promise((resolve, reject) => {
         cloudinary.uploader.upload_stream(
-          { folder: "Patient_Profiles" },
+          { folder: 'patient_Images' },
           (error, result) => {
             if (error) reject(error);
             else resolve(result);
@@ -65,12 +68,13 @@ exports.store = async (req, res) => {
         ).end(buffer);
       });
 
-      profileImageUrl = result.secure_url;
+      imageUrl = result.secure_url;
     }
 
     // 🏥 Create patient record
     const patient = new Patient({
       user: user._id,
+      patient_name,
       date_of_birth,
       gender,
       address,
@@ -78,13 +82,15 @@ exports.store = async (req, res) => {
       blood_group,
       allergies: Array.isArray(allergies) ? allergies : [allergies],
       medical_history,
-      profile_image: profileImageUrl
+      profile_image: imageUrl
     });
 
     await patient.save();
 
+    console.log(patient);
+
     req.flash("success", "Patient registered successfully.");
-    res.redirect(`/dashboard/${user._id}/patients`);
+    res.redirect(`/dashboard/${user._id}/patient`);
   } catch (error) {
     console.error("Error creating patient:", error);
     req.flash("error", "Error registering patient.");
@@ -92,7 +98,36 @@ exports.store = async (req, res) => {
   }
 };
 
- 
+
+exports.show = async (req, res) => {
+  try {
+    const patientId = req.params.id;
+
+    // find patient + doctor details
+    const patient = await Patient.findById(patientId).populate('user');
+    if (!patient) {
+      req.flash('error', 'Patient not found.');
+      return res.redirect('/patients');
+    }
+
+    // find related records
+    // const appointments = await Appointment.find({ patient: patientId }).sort({ date: -1 });
+    // const invoices = await Invoice.find({ patient: patientId }).sort({ createdAt: -1 });
+
+    res.render('patients/show', {
+      patient,
+      // appointments,
+      // invoices
+    });
+  } catch (err) {
+    console.error('Error loading patient profile:', err);
+    req.flash('error', 'Unable to load patient profile.');
+    res.redirect('/patients');
+  }
+};
+
+
+
 // Get Patient for Edit
 exports.edit = async (req, res) => {
   const token = req.session.token;

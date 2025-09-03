@@ -85,13 +85,13 @@
   </style>
 </head>
 <body>
-  <form action="/add_patient" method="POST" enctype="multipart/form-data">
+  <form action="/add_patient" method="post" enctype="multipart/form-data">
     <h2>Patient Registration</h2>
 
-    <!-- User -->
-     
-
     <!-- Date of Birth -->
+    <label for="patient_name">Patient Name</label>
+    <input type="text" id="patient_name" name="patient_name">
+
     <label for="dob">Date of Birth</label>
     <input type="date" id="dob" name="date_of_birth">
 
@@ -110,7 +110,7 @@
 
     <!-- Profile Image -->
     <label for="profile_image">Profile Image</label>
-    <input type="file" id="profile_image" name="profile_image" accept="image/*">
+    <input type="file" id="profile_image" name="imageUrl" accept="image/*">
 
     <!-- Emergency Contact -->
     <label for="emergency_contact">Emergency Contact</label>
@@ -130,13 +130,6 @@
     <!-- Medical History -->
     <label for="medical_history">Medical History</label>
     <textarea id="medical_history" name="medical_history" rows="4" placeholder="Enter medical history"></textarea>
-
-    <!-- Insurance -->
-    <label for="insurance">Insurance Policy</label>
-    <select id="insurance" name="insurance">
-      <option value="">Select insurance policy</option>
-      <!-- Populate dynamically -->
-    </select>
 
     <!-- Submit -->
     <button type="submit">Save Patient</button>

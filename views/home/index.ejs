@@ -1,918 +1,1123 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Group F Hospital - Your Health, Our Priority</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Saviors Hospital - Your Health, Our Priority</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+      :root {
+        --primary-blue: #2c5aa0;
+        --accent-green: #30a635;
+        --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: "Arial", sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background: #f5f6fa;
+      }
+      /* Header Styles */
+      .header {
+        background: linear-gradient(135deg, #2c5aa0 0%, #1e3c72 100%);
+        color: white;
+        padding: 0.7rem 0;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        transition: background 0.3s, backdrop-filter 0.3s;
+      }
+      .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 2rem;
+        min-height: 60px;
+      }
+      .logo {
+        font-size: 1.3rem;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .logo span {
+        font-weight: 400;
+        font-size: 1rem;
+        letter-spacing: 1px;
+      }
+      .nav-menu {
+        display: flex;
+        list-style: none;
+        gap: 2rem;
+        align-items: center;
+        transition: all 0.3s;
+      }
+      .nav-menu a {
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s;
+        font-size: 1rem;
+      }
+      .nav-menu a:hover {
+        color: #64b5f6;
+      }
+      .login-signup {
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        margin-left: 1rem;
+      }
+      .signup-btn,
+      .login-btn {
+        background-color: #30a635;
+        color: white;
+        padding: 0.3rem 1rem;
+        text-decoration: none;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: 0.3s ease;
+        font-size: 1rem;
+        margin: 0;
+        display: inline-block;
+      }
+      .signup-btn:hover,
+      .login-btn:hover {
+        background-color: #2a892f;
+        color: #fff;
+      }
+      /* Hamburger menu styles */
+      .hamburger {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+        width: 26px;
+        height: 26px;
+        justify-content: center;
+        align-items: center;
+        margin-left: 1rem;
+        padding: 0;
+        transition: all 0.2s;
+      }
+      .hamburger span {
+        height: 3px;
+        width: 100%;
+        background: white;
+        margin: 3px 0;
+        border-radius: 2px;
+        transition: 0.3s;
+        display: block;
+      }
+      /* Hero Section */
+      .hero {
+        background: linear-gradient(
+            rgba(44, 90, 160, 0.8),
+            rgba(30, 60, 114, 0.8)
+          ),
+          url("https://picsum.photos/seed/hospital/1920/800.jpg");
+        background-size: cover;
+        background-position: center;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: white;
+        margin-top: 80px;
+        padding: 2rem 0;
+      }
+      .hero-content h1 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        animation: fadeInUp 1s ease-out;
+      }
+      .hero-content p {
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+        animation: fadeInUp 1s ease-out 0.3s both;
+      }
+      .cta-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        animation: fadeInUp 1s ease-out 0.6s both;
+        flex-wrap: wrap;
+      }
+      .btn {
+        padding: 1rem 2rem;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: bold;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-block;
+      }
+      .btn-primary {
+        background: #4caf50;
+        color: white;
+      }
+      .btn-primary:hover {
+        background: #45a049;
+        transform: translateY(-2px);
+      }
+      .btn-secondary {
+        background: transparent;
+        color: white;
+        border: 2px solid white;
+      }
+      .btn-secondary:hover {
+        background: white;
+        color: #2c5aa0;
+      }
+      /* About Section */
+      .about {
+        padding: 80px 0;
+        background-color: white;
+      }
+      .about-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        align-items: center;
+      }
+      .about-image {
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+      }
+      .about-image img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+      .about-text h2 {
+        font-size: 2.2rem;
+        margin-bottom: 20px;
+        color: var(--primary-blue);
+      }
+      .about-text p {
+        margin-bottom: 15px;
+      }
+      .about-features {
+        margin-top: 20px;
+      }
+      .feature-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 15px;
+      }
+      .feature-item i {
+        color: var(--accent-green);
+        font-size: 1.5rem;
+      }
+      /* Services Section */
+      .services {
+        padding: 5rem 0;
+        background: #f8f9fa;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+      }
+      .section-title {
+        text-align: center;
+        font-size: 2.2rem;
+        margin-bottom: 3rem;
+        color: #2c5aa0;
+      }
+      .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+      }
+      .service-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+      .service-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      }
+      .service-icon {
+        font-size: 2.2rem;
+        color: #2c5aa0;
+        margin-bottom: 1rem;
+      }
+      .service-card h3 {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+        color: #333;
+      }
+      /* Doctors Section */
+      .doctors {
+        padding: 5rem 0;
+      }
+      .doctors-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 2rem;
+      }
+      .doctor-card {
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+      }
+      .doctor-card:hover {
+        transform: translateY(-5px);
+      }
+      .doctor-image {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+      }
+      .doctor-info {
+        padding: 1.2rem;
+        text-align: center;
+      }
+      .doctor-name {
+        font-size: 1.1rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+        color: #2c5aa0;
+      }
+      .doctor-specialty {
+        color: #666;
+        margin-bottom: 1rem;
+      }
+      .doctor-rating {
+        color: #ffd700;
+      }
+      /* Appointment Section */
+      .appointment {
+        padding: 5rem 0;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+      .appointment-form {
+        max-width: 600px;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 2rem;
+        border-radius: 15px;
+        backdrop-filter: blur(10px);
+      }
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+      }
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        width: 100%;
+        padding: 0.8rem;
+        border: none;
+        border-radius: 5px;
+        font-size: 1rem;
+      }
+      .form-group textarea {
+        height: 100px;
+        resize: vertical;
+      }
+      /* Contact Section */
+      .contact {
+        padding: 5rem 0;
+        background: #f8f9fa;
+      }
+      .contact-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 2rem;
+        margin-bottom: 3rem;
+      }
+      .contact-item {
+        text-align: center;
+        padding: 2rem;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+      .contact-icon {
+        font-size: 2rem;
+        color: #2c5aa0;
+        margin-bottom: 1rem;
+      }
+      /* Footer */
+      .footer {
+        background: #1e3c72;
+        color: white;
+        padding: 3rem 0 1rem;
+      }
+      .footer-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+      }
+      .footer-section h3 {
+        margin-bottom: 1rem;
+        color: #64b5f6;
+      }
+      .footer-section ul {
+        list-style: none;
+      }
+      .footer-section ul li {
+        margin-bottom: 0.5rem;
+      }
+      .footer-section a {
+        color: #ccc;
+        text-decoration: none;
+        transition: color 0.3s;
+      }
+      .footer-section a:hover {
+        color: #64b5f6;
+      }
+      .footer-bottom {
+        text-align: center;
+        padding-top: 2rem;
+        border-top: 1px solid #333;
+        color: #ccc;
+      }
+      /* Animations */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
         }
-
-        body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            color: #333;
+        to {
+          opacity: 1;
+          transform: translateY(0);
         }
-
-        /* Header Styles */
-        .header {
-            background: linear-gradient(135deg, #2c5aa0 0%, #1e3c72 100%);
-            color: white;
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 2rem;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-menu a {
-            color: white;
-            text-decoration: none;
-            transition: color 0.3s;
-            font-weight: 500;
-        }
-
-        .nav-menu a:hover {
-            color: #64b5f6;
-        }
-
-        .emergency-btn {
-            background: #ff4757;
-            color: white;
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
-
-        .emergency-btn:hover {
-            background: #ff3742;
-        }
-
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(rgba(44, 90, 160, 0.8), rgba(30, 60, 114, 0.8)), url('https://picsum.photos/seed/hospital/1920/800.jpg');
-            background-size: cover;
-            background-position: center;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: white;
-            margin-top: 80px;
-        }
-
-        .hero-content h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            animation: fadeInUp 1s ease-out;
-        }
-
-        .hero-content p {
-            font-size: 1.3rem;
-            margin-bottom: 2rem;
-            animation: fadeInUp 1s ease-out 0.3s both;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            animation: fadeInUp 1s ease-out 0.6s both;
-        }
-
-        .btn {
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: bold;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-primary {
-            background: #4CAF50;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #45a049;
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: white;
-            border: 2px solid white;
-        }
-
-        .btn-secondary:hover {
-            background: white;
-            color: #2c5aa0;
-        }
-
-        .about {
-            padding: 80px 0;
-            background-color: white;
-        }
-
-        .about-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            align-items: center;
-        }
-
-        .about-image {
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-        }
-
-        .about-image img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .about-text h2 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            color: var(--primary-blue);
-        }
-
-        .about-text p {
-            margin-bottom: 15px;
-        }
-
-        .about-features {
-            margin-top: 20px;
-        }
-
-        .feature-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .feature-item i {
-            color: var(--accent-green);
-            font-size: 1.5rem;
-        }
-
-        /* Services Section */
-        .services {
-            padding: 5rem 0;
-            background: #f8f9fa;
-        }
-
+      }
+      /* Responsive Design */
+      @media (max-width: 1200px) {
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
+          padding: 0 1rem;
         }
-
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            color: #2c5aa0;
+      }
+      @media (max-width: 992px) {
+        .about-content {
+          grid-template-columns: 1fr;
+          gap: 30px;
         }
-
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+        .about-image {
+          margin-top: 2rem;
         }
-
-        .service-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .service-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-        }
-
-        .service-icon {
-            font-size: 3rem;
-            color: #2c5aa0;
-            margin-bottom: 1rem;
-        }
-
-        .service-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: #333;
-        }
-
-        /* Doctors Section */
-        .doctors {
-            padding: 5rem 0;
-        }
-
-        .doctors-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-
-        .doctor-card {
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s;
-        }
-
-        .doctor-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .doctor-image {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-        }
-
-        .doctor-info {
-            padding: 1.5rem;
-            text-align: center;
-        }
-
-        .doctor-name {
-            font-size: 1.3rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-            color: #2c5aa0;
-        }
-
-        .doctor-specialty {
-            color: #666;
-            margin-bottom: 1rem;
-        }
-
-        .doctor-rating {
-            color: #ffd700;
-        }
-
-        /* Appointment Section */
-        .appointment {
-            padding: 5rem 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .appointment-form {
-            max-width: 600px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 2rem;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.8rem;
-            border: none;
-            border-radius: 5px;
-            font-size: 1rem;
-        }
-
-        .form-group textarea {
-            height: 100px;
-            resize: vertical;
-        }
-
-        /* Contact Section */
-        .contact {
-            padding: 5rem 0;
-            background: #f8f9fa;
-        }
-
-        .contact-info {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .contact-item {
-            text-align: center;
-            padding: 2rem;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .contact-icon {
-            font-size: 2.5rem;
-            color: #2c5aa0;
-            margin-bottom: 1rem;
-        }
-
-        /* Footer */
-        .footer {
-            background: #1e3c72;
-            color: white;
-            padding: 3rem 0 1rem;
-        }
-
         .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
+          grid-template-columns: 1fr 1fr;
         }
-
-        .footer-section h3 {
-            margin-bottom: 1rem;
-            color: #64b5f6;
+        .nav-container {
+          padding: 0 1rem;
         }
-
-        .footer-section ul {
-            list-style: none;
+      }
+      @media (max-width: 850px) {
+        .nav-menu {
+          gap: 1.2rem;
         }
-
-        .footer-section ul li {
-            margin-bottom: 0.5rem;
+        .login-signup {
+          gap: 0.5rem;
         }
-
-        .footer-section a {
-            color: #ccc;
-            text-decoration: none;
-            transition: color 0.3s;
+      }
+      @media (max-width: 768px) {
+        .nav-container {
+          flex-direction: row;
+          align-items: center;
+          padding: 0 1rem;
+          min-height: 56px;
         }
-
-        .footer-section a:hover {
-            color: #64b5f6;
+        .nav-menu {
+          position: absolute;
+          top: 60px;
+          right: 0;
+          background: #1e3c72;
+          flex-direction: column;
+          width: 200px;
+          gap: 0;
+          display: none;
+          box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+          border-radius: 0 0 10px 10px;
+          z-index: 1002;
+          align-items: flex-end;
         }
-
-        .footer-bottom {
-            text-align: center;
-            padding-top: 2rem;
-            border-top: 1px solid #333;
-            color: #ccc;
+        .nav-menu.open {
+          display: flex;
         }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .nav-menu li {
+          border-bottom: 1px solid #2c5aa0;
+          padding: 1rem 0;
+          text-align: right;
+          padding-right: 2rem;
+          width: 100%;
         }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .nav-menu {
-                display: none;
-            }
-
-            .hero-content h1 {
-                font-size: 2.5rem;
-            }
-
-            .hero-content p {
-                font-size: 1.1rem;
-            }
-
-            .cta-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .nav-container {
-                padding: 0 1rem;
-            }
+        .nav-menu li:last-child {
+          border-bottom: none;
         }
-
-        /* Notification Styles */
-        .notification {
-            position: fixed;
-            top: 100px;
-            right: 20px;
-            background: #4CAF50;
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 5px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            transform: translateX(400px);
-            transition: transform 0.3s;
-            z-index: 1001;
+        .hamburger {
+          display: flex;
+          width: 28px;
+          height: 28px;
+          margin-left: 1rem;
         }
-
-        .notification.show {
-            transform: translateX(0);
+        .login-signup {
+          gap: 0.5rem;
+          margin-left: 0.5rem;
         }
+        .signup-btn, .login-btn {
+          font-size: 0.95rem;
+          padding: 0.2rem 0.7rem;
+        }
+        .hero-content h1 {
+          font-size: 2rem;
+        }
+        .hero-content p {
+          font-size: 1rem;
+        }
+        .about {
+          padding: 40px 0;
+        }
+        .services,
+        .doctors,
+        .appointment,
+        .contact {
+          padding: 2.5rem 0;
+        }
+        .footer-content {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+        .doctor-image {
+          height: 160px;
+        }
+      }
+      @media (max-width: 600px) {
+        .header {
+          padding: 0.5rem 0;
+        }
+        .nav-container {
+          padding: 0 0.5rem;
+          min-height: 48px;
+        }
+        .logo {
+          font-size: 1rem;
+        }
+        .hamburger {
+          width: 22px;
+          height: 22px;
+          margin-left: 0.5rem;
+        }
+        .login-signup {
+          gap: 0.3rem;
+          margin-left: 0.3rem;
+        }
+        .signup-btn, .login-btn {
+          font-size: 0.8rem;
+          padding: 0.1rem 0.5rem;
+        }
+        .hero-content h1 {
+          font-size: 1.2rem;
+        }
+        .section-title {
+          font-size: 1.1rem;
+        }
+        .about-text h2 {
+          font-size: 1rem;
+        }
+        .appointment-form {
+          padding: 1rem;
+        }
+        .doctor-image {
+          height: 110px;
+        }
+        .service-icon {
+          font-size: 1.2rem;
+        }
+        .contact-icon {
+          font-size: 1rem;
+        }
+        .about-content {
+          gap: 15px;
+        }
+      }
+      /* Notification Styles */
+      .notification {
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        background: #4caf50;
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 5px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        transform: translateX(400px);
+        transition: transform 0.3s;
+        z-index: 1001;
+      }
+      .notification.show {
+        transform: translateX(0);
+      }
     </style>
-</head>
+  </head>
 
-<body>
-
-
+  <body>
     <header class="header">
-        <div class="nav-container">
-            <div class="logo">
-                <i class="fas fa-heartbeat"></i>
-                Group F Hospital
-            </div>
-
-            <nav>
-                <ul class="nav-menu">
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#services">Services</a></li>
-                    <li><a href="#doctors">Doctors</a></li>
-                    <li><a href="#appointment">Appointment</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </nav>
-            <button class="emergency-btn" onclick="handleEmergency()">
-                <i class="fas fa-phone"></i> Emergency
-            </button>
-
-                <a class="emergency-btn" href="/signup"><i class="fas fa-phone"></i> Signup</a>
-                <a class="emergency-btn" href="/login"><i class="fas fa-phone"></i> login</a>
-
+      <div class="nav-container">
+        <div class="logo">
+          <i class="fas fa-heartbeat"></i>
+          Saviors <span>Hospital</span>
         </div>
+        <nav>
+          <ul class="nav-menu">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#doctors">Doctors</a></li>
+            <li><a href="#appointment">Appointment</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </nav>
+        <div
+          class="hamburger"
+          id="hamburger"
+          aria-label="Open navigation"
+          tabindex="0"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="login-signup">
+          <a class="signup-btn" href="/signup">Signup</a>
+          <a class="login-btn" href="/login">login</a>
+        </div>
+      </div>
     </header>
-
     <!-- Hero Section -->
     <section id="home" class="hero">
-        <div class="hero-content">
-            <h1>Your Health, Our Priority</h1>
-            <p>Providing exceptional healthcare with compassion and excellence</p>
-            <div class="cta-buttons">
-                <a href="#appointment" class="btn btn-primary">Book Appointment</a>
-                <a href="#services" class="btn btn-secondary">Our Services</a>
-            </div>
+      <div class="hero-content">
+        <h1>Your Health, Our Priority</h1>
+        <p>Providing exceptional healthcare with compassion and excellence</p>
+        <div class="cta-buttons">
+          <a href="#appointment" class="btn btn-primary">Book Appointment</a>
+          <a href="#services" class="btn btn-secondary">Our Services</a>
         </div>
+      </div>
     </section>
     <section id="about" class="about">
-        <div class="container">
-            <div class="about-content">
-                <div class="about-text">
-                    <h2>About Central Hospital</h2>
-                    <p>Founded in 1985, Central Hospital has grown to become a leading healthcare provider in the
-                        region, offering a wide range of medical services with a focus on patient-centered care.</p>
-                    <p>Our 200-bed facility is equipped with cutting-edge technology and staffed by board-certified
-                        physicians, nurses, and healthcare professionals dedicated to delivering exceptional care.</p>
-                    <div class="about-features">
-                        <div class="feature-item">
-                            <i class="fas fa-check-circle"></i>
-                            <div>24/7 Emergency Services</div>
-                        </div>
-                        <div class="feature-item">
-                            <i class="fas fa-check-circle"></i>
-                            <div>Accredited by Joint Commission</div>
-                        </div>
-                        <div class="feature-item">
-                            <i class="fas fa-check-circle"></i>
-                            <div>Patient Satisfaction Award Winner</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="about-image">
-                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/16a6d897-4413-42e7-9c49-de7ebf45b90d.png"
-                        alt="Modern hospital building with glass facade and landscaped entrance" />
-                </div>
+      <div class="container">
+        <div class="about-content">
+          <div class="about-text">
+            <h2>About Central Hospital</h2>
+            <p>
+              Founded in 1985, Central Hospital has grown to become a leading
+              healthcare provider in the region, offering a wide range of
+              medical services with a focus on patient-centered care.
+            </p>
+            <p>
+              Our 200-bed facility is equipped with cutting-edge technology and
+              staffed by board-certified physicians, nurses, and healthcare
+              professionals dedicated to delivering exceptional care.
+            </p>
+            <div class="about-features">
+              <div class="feature-item">
+                <i class="fas fa-check-circle"></i>
+                <div>24/7 Emergency Services</div>
+              </div>
+              <div class="feature-item">
+                <i class="fas fa-check-circle"></i>
+                <div>Accredited by Joint Commission</div>
+              </div>
+              <div class="feature-item">
+                <i class="fas fa-check-circle"></i>
+                <div>Patient Satisfaction Award Winner</div>
+              </div>
             </div>
+          </div>
+          <div class="about-image">
+            <img
+              src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/16a6d897-4413-42e7-9c49-de7ebf45b90d.png"
+              alt="Modern hospital building with glass facade and landscaped entrance"
+            />
+          </div>
         </div>
+      </div>
     </section>
 
     <!-- Services Section -->
     <section id="services" class="services">
-        <div class="container">
-            <h2 class="section-title">Our Services</h2>
-            <div class="services-grid">
-                <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-user-md"></i>
-                    </div>
-                    <h3>General Medicine</h3>
-                    <p>Comprehensive primary care services for all ages with experienced physicians.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-heart"></i>
-                    </div>
-                    <h3>Cardiology</h3>
-                    <p>Advanced heart care with state-of-the-art diagnostic and treatment facilities.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-baby"></i>
-                    </div>
-                    <h3>Pediatrics</h3>
-                    <p>Specialized healthcare for infants, children, and adolescents with gentle care.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-brain"></i>
-                    </div>
-                    <h3>Neurology</h3>
-                    <p>Expert diagnosis and treatment of brain and nervous system disorders.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-x-ray"></i>
-                    </div>
-                    <h3>Radiology</h3>
-                    <p>Advanced imaging services including MRI, CT scans, and X-rays.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-pills"></i>
-                    </div>
-                    <h3>Pharmacy</h3>
-                    <p>24/7 pharmacy services with all essential medications and expert advice.</p>
-                </div>
+      <div class="container">
+        <h2 class="section-title">Our Services</h2>
+        <div class="services-grid">
+          <div class="service-card">
+            <div class="service-icon">
+              <i class="fas fa-user-md"></i>
             </div>
+            <h3>General Medicine</h3>
+            <p>
+              Comprehensive primary care services for all ages with experienced
+              physicians.
+            </p>
+          </div>
+          <div class="service-card">
+            <div class="service-icon">
+              <i class="fas fa-heart"></i>
+            </div>
+            <h3>Cardiology</h3>
+            <p>
+              Advanced heart care with state-of-the-art diagnostic and treatment
+              facilities.
+            </p>
+          </div>
+          <div class="service-card">
+            <div class="service-icon">
+              <i class="fas fa-baby"></i>
+            </div>
+            <h3>Pediatrics</h3>
+            <p>
+              Specialized healthcare for infants, children, and adolescents with
+              gentle care.
+            </p>
+          </div>
+          <div class="service-card">
+            <div class="service-icon">
+              <i class="fas fa-brain"></i>
+            </div>
+            <h3>Neurology</h3>
+            <p>
+              Expert diagnosis and treatment of brain and nervous system
+              disorders.
+            </p>
+          </div>
+          <div class="service-card">
+            <div class="service-icon">
+              <i class="fas fa-x-ray"></i>
+            </div>
+            <h3>Radiology</h3>
+            <p>
+              Advanced imaging services including MRI, CT scans, and X-rays.
+            </p>
+          </div>
+          <div class="service-card">
+            <div class="service-icon">
+              <i class="fas fa-pills"></i>
+            </div>
+            <h3>Pharmacy</h3>
+            <p>
+              24/7 pharmacy services with all essential medications and expert
+              advice.
+            </p>
+          </div>
         </div>
+      </div>
     </section>
 
     <!-- Doctors Section -->
     <section id="doctors" class="doctors">
-        <div class="container">
-            <h2 class="section-title">Our Expert Doctors</h2>
-            <div class="doctors-grid">
-                <div class="doctor-card">
-                    <img src="240_F_1216417197_kHxbzaLUfVb527M3zOELPOfVc9nlHBKl shar d.jpg" alt="Dr. Sarah Johnson"
-                        class="doctor-image">
-                    <div class="doctor-info">
-                        <div class="doctor-name">Dr. Sarah Johnson</div>
-                        <div class="doctor-specialty">Cardiologist</div>
-                        <div class="doctor-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="doctor-card">
-                    <img src="240_F_1577465412_Zb9VpVonmJ7cfV2nBldhjvKPcdPHraOt machil.jpg" alt="Dr. Michael Chen"
-                        class="doctor-image">
-                    <div class="doctor-info">
-                        <div class="doctor-name">Dr. Michael Chen</div>
-                        <div class="doctor-specialty">Neurologist</div>
-                        <div class="doctor-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="doctor-card">
-                    <img src="240_F_966325272_pyiISMVut92LGGVTGsT4wag4MvMDZfx1.jpg" alt="Dr. Emily Rodriguez"
-                        class="doctor-image">
-                    <div class="doctor-info">
-                        <div class="doctor-name">Dr. Emily Rodriguez</div>
-                        <div class="doctor-specialty">Pediatrician</div>
-                        <div class="doctor-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="doctor-card">
-                    <img src="240_F_340597034_xoRbRKXVMH2RxhSkiYVQAjrVKVs0KdB7.jpg" alt="Dr. David Wilson"
-                        class="doctor-image">
-                    <div class="doctor-info">
-                        <div class="doctor-name">Dr. David Wilson</div>
-                        <div class="doctor-specialty">General Medicine</div>
-                        <div class="doctor-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                        </div>
-                    </div>
-                </div>
+      <div class="container">
+        <h2 class="section-title">Our Expert Doctors</h2>
+        <div class="doctors-grid">
+          <div class="doctor-card">
+            <img src="/images/3.jpg" alt="Dr. Sarah Johnson" class="doctor-image" />
+            <div class="doctor-info">
+              <div class="doctor-name">Dr. Sarah Johnson</div>
+              <div class="doctor-specialty">Cardiologist</div>
+              <div class="doctor-rating">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </div>
             </div>
+          </div>
+          <div class="doctor-card">
+            <img
+              src="/images/ma2.jpg"
+              alt="Dr. Michael Chen"
+              class="doctor-image"
+            />
+            <div class="doctor-info">
+              <div class="doctor-name">Dr. Michael Chen</div>
+              <div class="doctor-specialty">Neurologist</div>
+              <div class="doctor-rating">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </div>
+            </div>
+          </div>
+          <div class="doctor-card">
+            <img
+              src="images/fe.jpg"
+              alt="Dr. Emily Rodriguez"
+              class="doctor-image"
+            />
+            <div class="doctor-info">
+              <div class="doctor-name">Dr. Emily Rodriguez</div>
+              <div class="doctor-specialty">Pediatrician</div>
+              <div class="doctor-rating">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </div>
+            </div>
+          </div>
+          <div class="doctor-card">
+            <img
+              src="images/ma1.jpg"
+              alt="Dr. David Wilson"
+              class="doctor-image"
+            />
+            <div class="doctor-info">
+              <div class="doctor-name">Dr. David Wilson</div>
+              <div class="doctor-specialty">General Medicine</div>
+              <div class="doctor-rating">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </section>
 
     <!-- Appointment Section -->
     <section id="appointment" class="appointment">
-        <div class="container">
-            <h2 class="section-title" style="color: white;">Book an Appointment</h2>
-            <form class="appointment-form" id="appointmentForm">
-                <div class="form-group">
-                    <label for="name">Full Name</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" name="phone" required>
-                </div>
-                <div class="form-group">
-                    <label for="department">Department</label>
-                    <select id="department" name="department" required>
-                        <option value="">Select Department</option>
-                        <option value="general">General Medicine</option>
-                        <option value="cardiology">Cardiology</option>
-                        <option value="neurology">Neurology</option>
-                        <option value="pediatrics">Pediatrics</option>
-                        <option value="radiology">Radiology</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="date">Preferred Date</label>
-                    <input type="date" id="date" name="date" required>
-                </div>
-                <div class="form-group">
-                    <label for="message">Additional Information</label>
-                    <textarea id="message" name="message"
-                        placeholder="Please describe your symptoms or reason for visit..."></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%; background: #4CAF50;">
-                    Book Appointment
-                </button>
-            </form>
-        </div>
+      <div class="container">
+        <h2 class="section-title" style="color: white">Book an Appointment</h2>
+        <form class="appointment-form" id="appointmentForm">
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" required />
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" required />
+          </div>
+          <div class="form-group">
+            <label for="department">Department</label>
+            <select id="department" name="department" required>
+              <option value="">Select Department</option>
+              <option value="general">General Medicine</option>
+              <option value="cardiology">Cardiology</option>
+              <option value="neurology">Neurology</option>
+              <option value="pediatrics">Pediatrics</option>
+              <option value="radiology">Radiology</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="date">Preferred Date</label>
+            <input type="date" id="date" name="date" required />
+          </div>
+          <div class="form-group">
+            <label for="message">Additional Information</label>
+            <textarea
+              id="message"
+              name="message"
+              placeholder="Please describe your symptoms or reason for visit..."
+            ></textarea>
+          </div>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            style="width: 100%; background: #4caf50"
+          >
+            Book Appointment
+          </button>
+        </form>
+      </div>
     </section>
 
     <!-- Contact Section -->
     <section id="contact" class="contact">
-        <div class="container">
-            <h2 class="section-title">Contact Us</h2>
-            <div class="contact-info">
-                <div class="contact-item">
-                    <div class="contact-icon">
-                        <i class="fas fa-map-marker-alt"></i>
-                    </div>
-                    <h3>Visit Us</h3>
-                    <p>345 Healthcare Avenue<br>Medical District, kampala 12345</p>
-                </div>
-                <div class="contact-item">
-                    <div class="contact-icon">
-                        <i class="fas fa-phone"></i>
-                    </div>
-                    <h3>Call Us</h3>
-                    <p>Emergency: (256) 771-234-567 <br>General: (256) 779-876-543</p>
-                </div>
-                <div class="contact-item">
-                    <div class="contact-icon">
-                        <i class="fas fa-envelope"></i>
-                    </div>
-                    <h3>Email Us</h3>
-                    <p>info@group F hospital.com<br>emergency@group F hospital.com</p>
-                </div>
-                <div class="contact-item">
-                    <div class="contact-icon">
-                        <i class="fas fa-clock"></i>
-                    </div>
-                    <h3>Working Hours</h3>
-                    <p>Mon-Fri: 8:00 AM - 8:00 PM<br>Sat-Sun: 9:00 AM - 6:00 PM</p>
-                </div>
+      <div class="container">
+        <h2 class="section-title">Contact Us</h2>
+        <div class="contact-info">
+          <div class="contact-item">
+            <div class="contact-icon">
+              <i class="fas fa-map-marker-alt"></i>
             </div>
+            <h3>Visit Us</h3>
+            <p>345 Healthcare Avenue<br />Medical District, kampala 12345</p>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">
+              <i class="fas fa-phone"></i>
+            </div>
+            <h3>Call Us</h3>
+            <p>Emergency: (256) 771-234-567 <br />General: (256) 779-876-543</p>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <h3>Email Us</h3>
+            <p>info@saviorshospital.com<br />emergency@saviorshospital.com</p>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">
+              <i class="fas fa-clock"></i>
+            </div>
+            <h3>Working Hours</h3>
+            <p>Mon-Fri: 8:00 AM - 8:00 PM<br />Sat-Sun: 9:00 AM - 6:00 PM</p>
+          </div>
         </div>
+      </div>
     </section>
 
     <!-- Footer -->
     <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>About Group F</h3>
-                    <p>We are committed to providing exceptional healthcare services with compassion,
-                        excellence, and
-                        innovation.</p>
-                </div>
-                <div class="footer-section">
-                    <h3>Quick Links</h3>
-                    <ul>
-                        <li><a href="#home">Home</a></li>
-                        <li><a href="#about">About</a></li>
-                        <li><a href="#services">Services</a></li>
-                        <li><a href="#doctors">Doctors</a></li>
-                        <li><a href="#appointment">Appointment</a></li>
-                    </ul>
-                </div>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h3>About Saviors Hospital</h3>
+            <p>
+              We are committed to providing exceptional healthcare services with
+              compassion, excellence, and innovation.
+            </p>
+          </div>
+          <div class="footer-section">
+            <h3>Quick Links</h3>
+            <ul>
+              <li><a href="#home">Home</a></li>
+              <li><a href="#about">About</a></li>
+              <li><a href="#services">Services</a></li>
+              <li><a href="#doctors">Doctors</a></li>
+              <li><a href="#appointment">Appointment</a></li>
+            </ul>
+          </div>
 
-                <div class="footer-section">
-                    <h3>Services</h3>
-                    <ul>
-                        <li><a href="#">General Medicine</a></li>
-                        <li><a href="#">Cardiology</a></li>
-                        <li><a href="#">Neurology</a></li>
-                        <li><a href="#">Pediatrics</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Follow Us</h3>
-                    <div style="font-size: 1.5rem; margin-top: 1rem;">
-                        <a href="#" style="margin-right: 1rem;"><i class="fab fa-facebook"></i></a>
-                        <a href="#" style="margin-right: 1rem;"><i class="fab fa-twitter"></i></a>
-                        <a href="#" style="margin-right: 1rem;"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-linkedin"></i></a>
-                    </div>
-                </div>
+          <div class="footer-section">
+            <h3>Services</h3>
+            <ul>
+              <li><a href="#">General Medicine</a></li>
+              <li><a href="#">Cardiology</a></li>
+              <li><a href="#">Neurology</a></li>
+              <li><a href="#">Pediatrics</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h3>Follow Us</h3>
+            <div style="font-size: 1.5rem; margin-top: 1rem">
+              <a href="#" style="margin-right: 1rem"
+                ><i class="fab fa-facebook"></i
+              ></a>
+              <a href="#" style="margin-right: 1rem"
+                ><i class="fab fa-twitter"></i
+              ></a>
+              <a href="#" style="margin-right: 1rem"
+                ><i class="fab fa-instagram"></i
+              ></a>
+              <a href="#"><i class="fab fa-linkedin"></i></a>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 Group F Hospital. All rights reserved. | ❤️ for better healthcare</p>
-            </div>
+          </div>
         </div>
+        <div class="footer-bottom">
+          <p>
+            &copy; 2025 Saviors Hospital. All rights reserved. | ❤️ for better
+            healthcare
+          </p>
+        </div>
+      </div>
     </footer>
 
     <!-- Notification -->
     <div id="notification" class="notification">
-        <span id="notificationText"></span>
+      <span id="notificationText"></span>
     </div>
 
     <script>
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
+      // Hamburger menu toggle
+      const hamburger = document.getElementById("hamburger");
+      const navMenu = document.querySelector(".nav-menu");
+      hamburger.addEventListener("click", function () {
+        navMenu.classList.toggle("open");
+      });
+      hamburger.addEventListener("keypress", function (e) {
+        if (e.key === "Enter" || e.key === " ") {
+          navMenu.classList.toggle("open");
+        }
+      });
+      // Close nav menu when clicking outside (mobile)
+      document.addEventListener("click", function (e) {
+        if (!navMenu.contains(e.target) && !hamburger.contains(e.target)) {
+          navMenu.classList.remove("open");
+        }
+      });
+
+      // Smooth scrolling for navigation links
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) {
+            target.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
             });
+          }
+          // Close nav menu on mobile after click
+          navMenu.classList.remove("open");
+        });
+      });
+
+      // Form submission handler
+      document
+        .getElementById("appointmentForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          // Get form data
+          const formData = new FormData(this);
+          const data = Object.fromEntries(formData);
+
+          // Validate phone number
+          const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+          if (!phoneRegex.test(data.phone.replace(/[\s\-\(\)]/g, ""))) {
+            showNotification("Please enter a valid phone number", "error");
+            return;
+          }
+
+          // Validate date (should be future date)
+          const selectedDate = new Date(data.date);
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+
+          if (selectedDate < today) {
+            showNotification("Please select a future date", "error");
+            return;
+          }
+
+          // Simulate form submission
+          showNotification(
+            "Appointment booked successfully! We will contact you soon.",
+            "success"
+          );
+          this.reset();
         });
 
-        // Form submission handler
-        document.getElementById('appointmentForm').addEventListener('submit', function (e) {
-            e.preventDefault();
+      // Emergency button handler
+      function handleEmergency() {
+        showNotification(
+          "Emergency: Dial 911 or call our emergency line at (555) 123-4567",
+          "emergency"
+        );
+      }
 
-            // Get form data
-            const formData = new FormData(this);
-            const data = Object.fromEntries(formData);
+      // Notification system
+      function showNotification(message, type = "success") {
+        const notification = document.getElementById("notification");
+        const notificationText = document.getElementById("notificationText");
 
-            // Validate phone number
-            const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
-            if (!phoneRegex.test(data.phone.replace(/[\s\-\(\)]/g, ''))) {
-                showNotification('Please enter a valid phone number', 'error');
-                return;
-            }
+        notificationText.textContent = message;
 
-            // Validate date (should be future date)
-            const selectedDate = new Date(data.date);
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-
-            if (selectedDate < today) {
-                showNotification('Please select a future date', 'error');
-                return;
-            }
-
-            // Simulate form submission
-            showNotification('Appointment booked successfully! We will contact you soon.', 'success');
-            this.reset();
-        });
-
-        // Emergency button handler
-        function handleEmergency() {
-            showNotification('Emergency: Dial 911 or call our emergency line at (555) 123-4567', 'emergency');
+        // Set background color based on type
+        switch (type) {
+          case "error":
+            notification.style.background = "#f44336";
+            break;
+          case "emergency":
+            notification.style.background = "#ff4757";
+            break;
+          default:
+            notification.style.background = "#4CAF50";
         }
 
-        // Notification system
-        function showNotification(message, type = 'success') {
-            const notification = document.getElementById('notification');
-            const notificationText = document.getElementById('notificationText');
+        notification.classList.add("show");
 
-            notificationText.textContent = message;
+        setTimeout(() => {
+          notification.classList.remove("show");
+        }, 5000);
+      }
 
-            // Set background color based on type
-            switch (type) {
-                case 'error':
-                    notification.style.background = '#f44336';
-                    break;
-                case 'emergency':
-                    notification.style.background = '#ff4757';
-                    break;
-                default:
-                    notification.style.background = '#4CAF50';
-            }
-
-            notification.classList.add('show');
-
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 5000);
+      // Add scroll effect to header
+      window.addEventListener("scroll", function () {
+        const header = document.querySelector(".header");
+        if (window.scrollY > 100) {
+          header.style.background = "rgba(30, 60, 114, 0.95)";
+          header.style.backdropFilter = "blur(10px)";
+        } else {
+          header.style.background =
+            "linear-gradient(135deg, #2c5aa0 0%, #1e3c72 100%)";
+          header.style.backdropFilter = "none";
         }
+      });
 
-        // Add scroll effect to header
-        window.addEventListener('scroll', function () {
-            const header = document.querySelector('.header');
-            if (window.scrollY > 100) {
-                header.style.background = 'rgba(30, 60, 114, 0.95)';
-                header.style.backdropFilter = 'blur(10px)';
-            } else {
-                header.style.background = 'linear-gradient(135deg, #2c5aa0 0%, #1e3c72 100%)';
-                header.style.backdropFilter = 'none';
-            }
+      // Add animation on scroll
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px",
+      };
+
+      const observer = new IntersectionObserver(function (entries) {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = "1";
+            entry.target.style.transform = "translateY(0)";
+          }
         });
+      }, observerOptions);
 
-        // Add animation on scroll
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver(function (entries) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        // Observe all service cards and doctor cards
-        document.addEventListener('DOMContentLoaded', function () {
-            const cards = document.querySelectorAll('.service-card, .doctor-card, .contact-item');
-            cards.forEach(card => {
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(30px)';
-                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-                observer.observe(card);
-            });
+      // Observe all service cards and doctor cards
+      document.addEventListener("DOMContentLoaded", function () {
+        const cards = document.querySelectorAll(
+          ".service-card, .doctor-card, .contact-item"
+        );
+        cards.forEach((card) => {
+          card.style.opacity = "0";
+          card.style.transform = "translateY(30px)";
+          card.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+          observer.observe(card);
         });
+      });
 
-        // Set minimum date for appointment to today
-        document.addEventListener('DOMContentLoaded', function () {
-            const dateInput = document.getElementById('date');
-            const today = new Date().toISOString().split('T')[0];
-            dateInput.setAttribute('min', today);
-        });
+      // Set minimum date for appointment to today
+      document.addEventListener("DOMContentLoaded", function () {
+        const dateInput = document.getElementById("date");
+        const today = new Date().toISOString().split("T")[0];
+        dateInput.setAttribute("min", today);
+      });
     </script>
-</body>
-
+  </body>
 </html>
